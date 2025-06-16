@@ -1,1 +1,10 @@
-# projeto-compilador-rust
+<div>
+  <h1 align="center"> Compilador Rust - Compiladores 2025.1 </h1>
+  <p align="center">
+    <img loading="lazy" src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
+  </p>
+</div>
+
+### Objetivos
+
+- < ALTERAR DEPOIS >
