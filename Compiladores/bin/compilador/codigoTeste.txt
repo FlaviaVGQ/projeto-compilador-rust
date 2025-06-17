@@ -1,0 +1,13 @@
+// Função que recebe dois inteiros e retorna a soma
+fn soma(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+fn main() {
+    let numero1 = 5;
+    let numero2 = 3;
+
+    let resultado = soma(numero1, numero2);
+
+    println!("A soma de {} + {} = {}", numero1, numero2, resultado);
+}
