@@ -39,7 +39,8 @@ SKIP:
 TOKEN :
 {
       <FN: "fn"> { System.out.println("Palavra Reservada: " + image); }
-    | <MENOR_IGUALT: "MENOR_IGUALt"> { System.out.println("Palavra Reservada: " + image); }
+    | <MAIN: "main" >  { System.out.println("Palavra Reservada: " + image); }
+    | <LET: "let"> { System.out.println("Palavra Reservada: " + image); }
     | <MUT: "mut"> { System.out.println("Palavra Reservada: " + image); }
     | <CONST: "const"> { System.out.println("Palavra Reservada: " + image); }
     | <STATIC: "static"> { System.out.println("Palavra Reservada: " + image); }
@@ -244,7 +245,7 @@ void Statement(): {} {
 }
 
 void LetStatement(): {} {
-    <MENOR_IGUALT> (<MUT>)? <IDENTIFICADOR> (<DOIS_PONTOS> Type())? (<RECEBE> Expression())?
+    <LET > (<MUT>)? <IDENTIFICADOR> (<DOIS_PONTOS> Type())? (<RECEBE> Expression())?
 }
 
 void ExpressionStatement(): {} {
@@ -332,4 +333,4 @@ void PrimaryExpression(): {} {
 
 void ArgumentList(): {} {
     Expression() (<VIRGULA> Expression())*
-}
+} 
