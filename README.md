@@ -5,6 +5,18 @@
   </p>
 </div>
 
-### Objetivos
+## 🎯 Objetivos e ✅ Progresso do Compilador Rust
 
-- < ALTERAR DEPOIS >
+Este é um controle de progresso para a implementação de funcionalidades no compilador da linguagem Rust.
+
+### 📋 Checklist de Funcionalidades
+
+- [x] Tipos básicos
+- [x] Atribuições
+- [x] Declaração de funções
+- [ ] Operadores relacionais, aritméticos e booleanos
+- [ ] Chamada de funções
+- [ ] Laços
+- [ ] Estrutura condicional simples e composta
+- [ ] Comando de entrada e saída
+- [ ] Expressões
