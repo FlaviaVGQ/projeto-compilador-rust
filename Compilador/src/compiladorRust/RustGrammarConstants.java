@@ -11,183 +11,229 @@ public interface RustGrammarConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int SINGLE_LINE_COMMENT = 5;
+  int COMENTARIO_SIMPMENOR_IGUALS = 5;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 6;
+  int COMENTARIOS_LONGO = 6;
   /** RegularExpression Id. */
-  int FN = 7;
+  int AS = 7;
   /** RegularExpression Id. */
-  int LET = 8;
+  int BREAK = 8;
   /** RegularExpression Id. */
-  int MUT = 9;
+  int CONST = 9;
   /** RegularExpression Id. */
-  int CONST = 10;
+  int CONTINUE = 10;
   /** RegularExpression Id. */
-  int STATIC = 11;
+  int CRATE = 11;
   /** RegularExpression Id. */
-  int STRUCT = 12;
+  int ELSE = 12;
   /** RegularExpression Id. */
   int ENUM = 13;
   /** RegularExpression Id. */
-  int TRAIT = 14;
+  int EXTERN = 14;
   /** RegularExpression Id. */
-  int IMPL = 15;
+  int FALSE = 15;
   /** RegularExpression Id. */
-  int USE = 16;
+  int FN = 16;
   /** RegularExpression Id. */
-  int MOD = 17;
+  int FOR = 17;
   /** RegularExpression Id. */
-  int PUB = 18;
+  int IF = 18;
   /** RegularExpression Id. */
-  int CRATE = 19;
+  int IMPL = 19;
   /** RegularExpression Id. */
-  int SELF = 20;
+  int IN = 20;
   /** RegularExpression Id. */
-  int SUPER = 21;
+  int LET = 21;
   /** RegularExpression Id. */
-  int AS = 22;
+  int LOOP = 22;
   /** RegularExpression Id. */
   int MATCH = 23;
   /** RegularExpression Id. */
-  int IF = 24;
+  int MOD = 24;
   /** RegularExpression Id. */
-  int ELSE = 25;
+  int MOVE = 25;
   /** RegularExpression Id. */
-  int LOOP = 26;
+  int MUT = 26;
   /** RegularExpression Id. */
-  int WHILE = 27;
+  int PUB = 27;
   /** RegularExpression Id. */
-  int FOR = 28;
+  int REF = 28;
   /** RegularExpression Id. */
-  int IN = 29;
+  int RETURN = 29;
   /** RegularExpression Id. */
-  int BREAK = 30;
+  int SELF = 30;
   /** RegularExpression Id. */
-  int CONTINUE = 31;
+  int CAPITAL_SELF = 31;
   /** RegularExpression Id. */
-  int RETURN = 32;
+  int STATIC = 32;
   /** RegularExpression Id. */
-  int TRUE = 33;
+  int STRUCT = 33;
   /** RegularExpression Id. */
-  int FALSE = 34;
+  int SUPER = 34;
   /** RegularExpression Id. */
-  int PRINTLN = 35;
+  int TRAIT = 35;
   /** RegularExpression Id. */
-  int MACRO_RULES = 36;
+  int TRUE = 36;
   /** RegularExpression Id. */
-  int I8 = 37;
+  int TYPE = 37;
   /** RegularExpression Id. */
-  int I16 = 38;
+  int UNSAFE = 38;
   /** RegularExpression Id. */
-  int I32 = 39;
+  int USE = 39;
   /** RegularExpression Id. */
-  int I64 = 40;
+  int WHERE = 40;
   /** RegularExpression Id. */
-  int ISIZE = 41;
+  int WHILE = 41;
   /** RegularExpression Id. */
-  int U8 = 42;
+  int PRINTLN = 42;
   /** RegularExpression Id. */
-  int U16 = 43;
+  int I8 = 43;
   /** RegularExpression Id. */
-  int U32 = 44;
+  int I16 = 44;
   /** RegularExpression Id. */
-  int U64 = 45;
+  int I32 = 45;
   /** RegularExpression Id. */
-  int USIZE = 46;
+  int I64 = 46;
   /** RegularExpression Id. */
-  int F32 = 47;
+  int ISIZE = 47;
   /** RegularExpression Id. */
-  int F64 = 48;
+  int U8 = 48;
   /** RegularExpression Id. */
-  int BOOL_TYPE = 49;
+  int U16 = 49;
   /** RegularExpression Id. */
-  int CHAR_TYPE = 50;
+  int U32 = 50;
   /** RegularExpression Id. */
-  int STR_TYPE = 51;
+  int U64 = 51;
   /** RegularExpression Id. */
-  int STRING_TYPE = 52;
+  int USIZE = 52;
   /** RegularExpression Id. */
-  int UNIT_TYPE = 53;
+  int F32 = 53;
   /** RegularExpression Id. */
-  int LPAREN = 54;
+  int F64 = 54;
   /** RegularExpression Id. */
-  int RPAREN = 55;
+  int BOOL_TYPE = 55;
   /** RegularExpression Id. */
-  int LBRACE = 56;
+  int CHAR_TYPE = 56;
   /** RegularExpression Id. */
-  int RBRACE = 57;
+  int STR_TYPE = 57;
   /** RegularExpression Id. */
-  int LBRACKET = 58;
+  int STRING_TYPE = 58;
   /** RegularExpression Id. */
-  int RBRACKET = 59;
+  int PARENTESES = 59;
   /** RegularExpression Id. */
-  int SEMICOLON = 60;
+  int ABRE_PAR = 60;
   /** RegularExpression Id. */
-  int COMMA = 61;
+  int FECHA_PAR = 61;
   /** RegularExpression Id. */
-  int DOT = 62;
+  int ABRE_CHAVE = 62;
   /** RegularExpression Id. */
-  int COLON = 63;
+  int FECHA_CHAVE = 63;
   /** RegularExpression Id. */
-  int DOUBLE_COLON = 64;
+  int ABRE_COLCH = 64;
   /** RegularExpression Id. */
-  int ARROW = 65;
+  int FECHA_COLCH = 65;
   /** RegularExpression Id. */
-  int ASSIGN = 66;
+  int VIRGULA = 66;
   /** RegularExpression Id. */
-  int EQ = 67;
+  int PONTO_VIRGULA = 67;
   /** RegularExpression Id. */
-  int NE = 68;
+  int DOIS_PONTOS = 68;
   /** RegularExpression Id. */
-  int LT = 69;
+  int DUPLO_DOIS_PONTOS = 69;
   /** RegularExpression Id. */
-  int LE = 70;
+  int INTERVALO_FECHADO = 70;
   /** RegularExpression Id. */
-  int GT = 71;
+  int INTERVALO_ABERTO = 71;
   /** RegularExpression Id. */
-  int GE = 72;
+  int PONTO = 72;
   /** RegularExpression Id. */
-  int AND_OP = 73;
+  int INTERROGACAO = 73;
   /** RegularExpression Id. */
-  int OR_OP = 74;
+  int ARROBA = 74;
   /** RegularExpression Id. */
-  int NOT_OP = 75;
+  int CERQUILHA = 75;
   /** RegularExpression Id. */
-  int PLUS = 76;
+  int SHIFT_ESQ_IGUAL = 76;
   /** RegularExpression Id. */
-  int MINUS = 77;
+  int SHIFT_DIR_IGUAL = 77;
   /** RegularExpression Id. */
-  int STAR = 78;
+  int SHIFT_ESQ = 78;
   /** RegularExpression Id. */
-  int SLASH = 79;
+  int SHIFT_DIR = 79;
   /** RegularExpression Id. */
-  int PERCENT = 80;
+  int E_BIT_IGUAL = 80;
   /** RegularExpression Id. */
-  int PLUS_ASSIGN = 81;
+  int OU_BIT_IGUAL = 81;
   /** RegularExpression Id. */
-  int MINUS_ASSIGN = 82;
+  int XOR_IGUAL = 82;
   /** RegularExpression Id. */
-  int STAR_ASSIGN = 83;
+  int IGUAL_IGUAL = 83;
   /** RegularExpression Id. */
-  int SLASH_ASSIGN = 84;
+  int DIFERENTE = 84;
   /** RegularExpression Id. */
-  int PERCENT_ASSIGN = 85;
+  int MAIOR_IGUAL = 85;
   /** RegularExpression Id. */
-  int IDENTIFIER = 86;
+  int MENOR_IGUAL = 86;
   /** RegularExpression Id. */
-  int LETTER = 87;
+  int E_LOGICO = 87;
   /** RegularExpression Id. */
-  int DIGIT = 88;
+  int OU_LOGICO = 88;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 89;
+  int SOMA_IGUAL = 89;
   /** RegularExpression Id. */
-  int FLOATING_LITERAL = 90;
+  int SUB_IGUAL = 90;
   /** RegularExpression Id. */
-  int CHAR_LITERAL = 91;
+  int MUL_IGUAL = 91;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 92;
+  int DIV_IGUAL = 92;
   /** RegularExpression Id. */
-  int BOOL_LITERAL = 93;
+  int MOD_IGUAL = 93;
+  /** RegularExpression Id. */
+  int SETA = 94;
+  /** RegularExpression Id. */
+  int SETA_GORDA = 95;
+  /** RegularExpression Id. */
+  int IGUAL = 96;
+  /** RegularExpression Id. */
+  int MAIOR = 97;
+  /** RegularExpression Id. */
+  int MENOR = 98;
+  /** RegularExpression Id. */
+  int SOMA = 99;
+  /** RegularExpression Id. */
+  int SUB = 100;
+  /** RegularExpression Id. */
+  int MUL = 101;
+  /** RegularExpression Id. */
+  int DIV = 102;
+  /** RegularExpression Id. */
+  int MOD_ = 103;
+  /** RegularExpression Id. */
+  int E_BIT = 104;
+  /** RegularExpression Id. */
+  int OU_BIT = 105;
+  /** RegularExpression Id. */
+  int XOR = 106;
+  /** RegularExpression Id. */
+  int NEGACAO = 107;
+  /** RegularExpression Id. */
+  int LETRA = 108;
+  /** RegularExpression Id. */
+  int DIGITO = 109;
+  /** RegularExpression Id. */
+  int UNDER = 110;
+  /** RegularExpression Id. */
+  int IDENTIFICADOR = 111;
+  /** RegularExpression Id. */
+  int INTEGER_LITERAL = 112;
+  /** RegularExpression Id. */
+  int DECIMAL = 113;
+  /** RegularExpression Id. */
+  int FLOATING_LITERAL = 114;
+  /** RegularExpression Id. */
+  int STRING_LITERAL = 115;
+  /** RegularExpression Id. */
+  int BOOL_LITERAL = 116;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -199,38 +245,44 @@ public interface RustGrammarConstants {
     "\"\\r\"",
     "\"\\t\"",
     "\"\\n\"",
-    "<SINGLE_LINE_COMMENT>",
-    "<MULTI_LINE_COMMENT>",
-    "\"fn\"",
-    "\"let\"",
-    "\"mut\"",
+    "<COMENTARIO_SIMPMENOR_IGUALS>",
+    "<COMENTARIOS_LONGO>",
+    "\"as\"",
+    "\"break\"",
     "\"const\"",
+    "\"continue\"",
+    "\"crate\"",
+    "\"else\"",
+    "\"enum\"",
+    "\"extern\"",
+    "\"false\"",
+    "\"fn\"",
+    "\"for\"",
+    "\"if\"",
+    "\"impl\"",
+    "\"in\"",
+    "\"let\"",
+    "\"loop\"",
+    "\"match\"",
+    "\"mod\"",
+    "\"move\"",
+    "\"mut\"",
+    "\"pub\"",
+    "\"ref\"",
+    "\"return\"",
+    "\"self\"",
+    "\"Self\"",
     "\"static\"",
     "\"struct\"",
-    "\"enum\"",
-    "\"trait\"",
-    "\"impl\"",
-    "\"use\"",
-    "\"mod\"",
-    "\"pub\"",
-    "\"crate\"",
-    "\"self\"",
     "\"super\"",
-    "\"as\"",
-    "\"match\"",
-    "\"if\"",
-    "\"else\"",
-    "\"loop\"",
-    "\"while\"",
-    "\"for\"",
-    "\"in\"",
-    "\"break\"",
-    "\"continue\"",
-    "\"return\"",
+    "\"trait\"",
     "\"true\"",
-    "\"false\"",
+    "\"type\"",
+    "\"unsafe\"",
+    "\"use\"",
+    "\"where\"",
+    "\"while\"",
     "\"println!\"",
-    "\"macro_rules!\"",
     "\"i8\"",
     "\"i16\"",
     "\"i32\"",
@@ -254,38 +306,55 @@ public interface RustGrammarConstants {
     "\"}\"",
     "\"[\"",
     "\"]\"",
-    "\";\"",
     "\",\"",
-    "\".\"",
+    "\";\"",
     "\":\"",
     "\"::\"",
-    "\"->\"",
-    "\"=\"",
+    "\"..=\"",
+    "\"..\"",
+    "\".\"",
+    "\"?\"",
+    "\"@\"",
+    "\"#\"",
+    "\"<<=\"",
+    "\">>=\"",
+    "\"<<\"",
+    "\">>\"",
+    "\"&=\"",
+    "\"|=\"",
+    "\"^=\"",
     "\"==\"",
     "\"!=\"",
-    "\"<\"",
-    "\"<=\"",
-    "\">\"",
     "\">=\"",
+    "\"<=\"",
     "\"&&\"",
     "\"||\"",
-    "\"!\"",
-    "\"+\"",
-    "\"-\"",
-    "\"*\"",
-    "\"/\"",
-    "\"%\"",
     "\"+=\"",
     "\"-=\"",
     "\"*=\"",
     "\"/=\"",
     "\"%=\"",
-    "<IDENTIFIER>",
-    "<LETTER>",
-    "<DIGIT>",
+    "\"->\"",
+    "\"=>\"",
+    "\"=\"",
+    "\">\"",
+    "\"<\"",
+    "\"+\"",
+    "\"-\"",
+    "\"*\"",
+    "\"/\"",
+    "\"%\"",
+    "\"&\"",
+    "\"|\"",
+    "\"^\"",
+    "\"!\"",
+    "<LETRA>",
+    "<DIGITO>",
+    "\"_\"",
+    "<IDENTIFICADOR>",
     "<INTEGER_LITERAL>",
+    "<DECIMAL>",
     "<FLOATING_LITERAL>",
-    "<CHAR_LITERAL>",
     "<STRING_LITERAL>",
     "<BOOL_LITERAL>",
   };
