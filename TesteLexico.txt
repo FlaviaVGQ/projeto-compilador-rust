@@ -1,0 +1,18 @@
+fn main() {
+    let x = 10;
+    if (x > 5) {
+        loop {
+            println!("infinito");
+        }
+    
+        while (x < 10) {
+            println!("menor que 10");
+        }
+    
+        for i in valores {
+            println!("valor");
+        }
+    } else {
+        println!("menor ou igual a 5");
+    }
+}
