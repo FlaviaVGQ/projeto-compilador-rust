@@ -12,9 +12,9 @@ Este é um controle de progresso para a implementação de funcionalidades no co
 ### 📋 Checklist de Funcionalidades
 
 - [x] Tipos básicos
-- [] Atribuições
+- [ ] Atribuições
 - [x] Declaração de funções
-- [] Operadores relacionais, aritméticos e booleanos
+- [ ] Operadores relacionais, aritméticos e booleanos
 - [ ] Chamada de funções
 - [x] Laços
 - [x] Estrutura condicional simples e composta
