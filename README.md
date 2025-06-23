@@ -14,9 +14,9 @@ Este é um controle de progresso para a implementação de funcionalidades no co
 - [x] Tipos básicos
 - [x] Atribuições
 - [x] Declaração de funções
-- [ ] Operadores relacionais, aritméticos e booleanos
-- [ ] Chamada de funções
-- [ ] Laços
-- [ ] Estrutura condicional simples e composta
-- [ ] Comando de entrada e saída
+- [x] Operadores relacionais, aritméticos e booleanos
+- [x] Chamada de funções
+- [x] Laços
+- [x] Estrutura condicional simples e composta
+- [x] Comando de entrada e saída
 - [ ] Expressões
