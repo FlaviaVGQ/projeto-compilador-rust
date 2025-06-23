@@ -1,6 +1,9 @@
-/**
- * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */
+/********************************
+ * JavaCC - Compilador Rust     *
+ * Alteração no RustGrammar.jj  *
+ * Teste no RustGrammar.java    *
+ * Main.java programa principal *
+ ********************************/
 options
 {
   static = true;
@@ -35,307 +38,399 @@ public class RustGrammar {
 PARSER_END(RustGrammar)
 
 
-SKIP:
+// Espaços e comentários ----------------------------------
+SKIP :
 {
-      " " | "\r" | "\t" | "\n"
-    | <COMENTARIO_SIMPMENOR_IGUALS: "//" (~["\n", "\r"])* ("\n" | "\r" | "\r\n")?>
-    | <COMENTARIOS_LONGO: "/" (~[]) "*/">
-}
+      " " | "\t" | "\n" | "\r" | "\f"
 
-/* ============================================================
- *  TOKENS – PALAVRAS‑CHAVE DE RUST
- * ============================================================ */
+  | <COMENTARIO_SIMPLES :
+        "//" (~["\n", "\r"])* ( "\r\n" | "\n" | "\r" )?
+    >
 
-TOKEN :
-{
-      <AS: "as">                             { System.out.println("Palavra Reservada: " + image); }
-    | <BREAK: "break">                       { System.out.println("Palavra Reservada: " + image); }
-    | <CONST: "const">                       { System.out.println("Palavra Reservada: " + image); }
-    | <CONTINUE: "continue">                 { System.out.println("Palavra Reservada: " + image); }
-    | <CRATE: "crate">                       { System.out.println("Palavra Reservada: " + image); }
-    | <ELSE: "else">                         { System.out.println("Palavra Reservada: " + image); }
-    | <ENUM: "enum">                         { System.out.println("Palavra Reservada: " + image); }
-    | <EXTERN: "extern">                     { System.out.println("Palavra Reservada: " + image); }
-    | <FALSE: "false">                       { System.out.println("Palavra Reservada: " + image); }
-    | <FN: "fn">                             { System.out.println("Palavra Reservada: " + image); }
-    | <FOR: "for">                           { System.out.println("Palavra Reservada: " + image); }
-    | <IF: "if">                             { System.out.println("Palavra Reservada: " + image); }
-    | <IMPL: "impl">                         { System.out.println("Palavra Reservada: " + image); }
-    | <IN: "in">                             { System.out.println("Palavra Reservada: " + image); }
-    | <LET: "let">                           { System.out.println("Palavra Reservada: " + image); }
-    | <LOOP: "loop">                         { System.out.println("Palavra Reservada: " + image); }
-    | <MATCH: "match">                       { System.out.println("Palavra Reservada: " + image); }
-    | <MOD: "mod">                           { System.out.println("Palavra Reservada: " + image); }
-    | <MOVE: "move">                         { System.out.println("Palavra Reservada: " + image); }
-    | <MUT: "mut">                           { System.out.println("Palavra Reservada: " + image); }
-    | <PUB: "pub">                           { System.out.println("Palavra Reservada: " + image); }
-    | <REF: "ref">                           { System.out.println("Palavra Reservada: " + image); }
-    | <RETURN: "return">                     { System.out.println("Palavra Reservada: " + image); }
-    | <SELF: "self">                         { System.out.println("Palavra Reservada: " + image); }
-    | <CAPITAL_SELF: "Self">                 { System.out.println("Palavra Reservada: " + image); }
-    | <STATIC: "static">                     { System.out.println("Palavra Reservada: " + image); }
-    | <STRUCT: "struct">                     { System.out.println("Palavra Reservada: " + image); }
-    | <SUPER: "super">                       { System.out.println("Palavra Reservada: " + image); }
-    | <TRAIT: "trait">                       { System.out.println("Palavra Reservada: " + image); }
-    | <TRUE: "true">                         { System.out.println("Palavra Reservada: " + image); }
-    | <TYPE: "type">                         { System.out.println("Palavra Reservada: " + image); }
-    | <UNSAFE: "unsafe">                     { System.out.println("Palavra Reservada: " + image); }
-    | <USE: "use">                           { System.out.println("Palavra Reservada: " + image); }
-    | <WHERE: "where">                       { System.out.println("Palavra Reservada: " + image); }
-    | <WHILE: "while">                       { System.out.println("Palavra Reservada: " + image); }
-    | < PRINTLN : "println!" >               { System.out.println("Palavra Reservada: " + image); }
+  | <COMENTARIO_LONGO :
+        "/*" ( ~["*"] | ("*" ~["/"]) )* "*/"
+    >
 }
 
 
-/* ============================================================
- *  TIPOS PRIMITIVOS COMUNS (Simplificado, Rust tem muitos outros)
- * ============================================================ */
-
-
+// Palavras reservadas ------------------------------------
 TOKEN :
 {
-      <I8: "i8"> { System.out.println("Tipo: " + image); }
-    | <I16: "i16"> { System.out.println("Tipo: " + image); }
-    | <I32: "i32"> { System.out.println("Tipo: " + image); }
-    | <I64: "i64"> { System.out.println("Tipo: " + image); }
-    | <ISIZE: "isize"> { System.out.println("Tipo: " + image); }
-    | <U8: "u8"> { System.out.println("Tipo: " + image); }
-    | <U16: "u16"> { System.out.println("Tipo: " + image); }
-    | <U32: "u32"> { System.out.println("Tipo: " + image); }
-    | <U64: "u64"> { System.out.println("Tipo: " + image); }
-    | <USIZE: "usize"> { System.out.println("Tipo: " + image); }
-    | <F32: "f32"> { System.out.println("Tipo: " + image); }
-    | <F64: "f64"> { System.out.println("Tipo: " + image); }
-    | <BOOL_TYPE: "bool"> { System.out.println("Tipo: " + image); }
-    | <CHAR_TYPE: "char"> { System.out.println("Tipo: " + image); }
-    | <STR_TYPE: "str"> { System.out.println("Tipo: " + image); }
+      <FN      : "fn">         { System.out.println("Palavra Reservada: " + image); }
+    | <MAIN    : "main">       { System.out.println("Palavra Reservada: " + image); } 
+    | <LET     : "let">        { System.out.println("Palavra Reservada: " + image); }
+    | <MUT     : "mut">        { System.out.println("Palavra Reservada: " + image); }
+    | <IF      : "if">         { System.out.println("Palavra Reservada: " + image); }
+    | <ELSE_IF : "else if">    { System.out.println("Palavra Reservada: " + image); }
+    | <ELSE    : "else">       { System.out.println("Palavra Reservada: " + image); }
+    | <WHILE   : "while">      { System.out.println("Palavra Reservada: " + image); }
+    | <TRUE    : "true">       { System.out.println("Literal Bool: " + image); }
+    | <FALSE   : "false">      { System.out.println("Literal Bool: " + image); }
+    | <PRINT   : "print!">     { System.out.println("Macro: " + image); }
+    | <PRINTLN : "println!">   { System.out.println("Macro: " + image); }
+    | <RETURN  : "return">     { System.out.println("Palavra Reservada: " + image); }
+    | <USE     : "use">        { System.out.println("Palavra Reservada: " + image); }
+    | <READLINE: "read_line">  { System.out.println("Palavra Reservada: " + image); }
+}
+
+// Tipos básicos ------------------------------------------
+TOKEN :
+{
+      <I8         : "i8">     { System.out.println("Tipo: " + image); }
+    | <I16        : "i16">    { System.out.println("Tipo: " + image); }
+    | <I32        : "i32">    { System.out.println("Tipo: " + image); }
+    | <I64        : "i64">    { System.out.println("Tipo: " + image); }
+    | <U8         : "u8">     { System.out.println("Tipo: " + image); }
+    | <U16        : "u16">    { System.out.println("Tipo: " + image); }
+    | <U32        : "u32">    { System.out.println("Tipo: " + image); }
+    | <U64        : "u64">    { System.out.println("Tipo: " + image); }
+    | <F32        : "f32">    { System.out.println("Tipo: " + image); }
+    | <F64        : "f64">    { System.out.println("Tipo: " + image); }
+    | <BOOL_TYPE  : "bool">   { System.out.println("Tipo: " + image); }
+    | <CHAR_TYPE  : "char">   { System.out.println("Tipo: " + image); }
     | <STRING_TYPE: "String"> { System.out.println("Tipo: " + image); } 
-    | <PARENTESES: "()"> { System.out.println("Tipo: " + image); } 
 }
 
-
-/* ============================================================
- *  TOKENS – DELIMITADORES E PONTUAÇÃO
- * ============================================================ */
-
+// Delimitadores ------------------------------------------
 TOKEN :
 {
-      < ABRE_PAR           : "("   > { System.out.println("Abre parêntese: "          + image); }
-    | < FECHA_PAR          : ")"   > { System.out.println("Fecha parêntese: "         + image); }
-    | < ABRE_CHAVE         : "{"   > { System.out.println("Abre chave: "              + image); }
-    | < FECHA_CHAVE        : "}"   > { System.out.println("Fecha chave: "             + image); }
-    | < ABRE_COLCH         : "["   > { System.out.println("Abre colchete: "           + image); }
-    | < FECHA_COLCH        : "]"   > { System.out.println("Fecha colchete: "          + image); }
-    | < VIRGULA            : ","   > { System.out.println("Vírgula: "                 + image); }
-    | < PONTO_VIRGULA      : ";"   > { System.out.println("Ponto‑vírgula: "           + image); }
-    | < DOIS_PONTOS        : ":"   > { System.out.println("Dois‑pontos: "             + image); }
-    | < DUPLO_DOIS_PONTOS  : "::"  > { System.out.println("Operador de caminho :: "   + image); }
-    | < INTERVALO_FECHADO  : "..=" > { System.out.println("Intervalo fechado ..=: "   + image); }
-    | < INTERVALO_ABERTO   : ".."  > { System.out.println("Intervalo aberto ..: "     + image); }
-    | < PONTO              : "."   > { System.out.println("Ponto: "                   + image); }
-    | < INTERROGACAO       : "?"   > { System.out.println("Operador ?: "              + image); }
-    | < ARROBA             : "@"   > { System.out.println("Símbolo @: "               + image); }
-    | < CERQUILHA          : "#"   > { System.out.println("Símbolo #: "               + image); }
-  
+      <ABRE_CHAVES     : "{">  { System.out.println("Abre Chaves: " + image); }
+    | <FECHA_CHAVES    : "}">  { System.out.println("Fecha Chaves: " + image); }
+    | <ABRE_PARENTESES : "(">  { System.out.println("Abre Parênteses: " + image); }
+    | <FECHA_PARENTESES: ")">  { System.out.println("Fecha Parênteses: " + image); }
+    | <PONTO_VIRGULA   : ";">  { System.out.println("Ponto e Vírgula: " + image); }
+    | <VIRGULA         : ",">  { System.out.println("Vírgula: " + image); }
+    | <DOIS_PONTOS     : ":">  { System.out.println("Dois Pontos: " + image); }
+    | <SETA            : "->"> { System.out.println("Seta: " + image); }
+    | <PONTO           : ".">  { System.out.println("Ponto: " + image); }
 }
 
-
-/* ============================================================
- *  TOKENS – OPERADORES (ordem do maior para o menor lexema!)
- * ============================================================ */
-
+// Operadores ---------------------------------------------
 TOKEN :
 {
-      < SHIFT_ESQ_IGUAL : "<<=" > { System.out.println("Shift <<=: "             + image); }
-    | < SHIFT_DIR_IGUAL : ">>=" > { System.out.println("Shift >>=: "             + image); }
-    | < SHIFT_ESQ       : "<<"  > { System.out.println("Shift <<: "              + image); }
-    | < SHIFT_DIR       : ">>"  > { System.out.println("Shift >>: "              + image); }
-    | < E_BIT_IGUAL     : "&="  > { System.out.println("E bit‑a‑bit &=: "        + image); }
-    | < OU_BIT_IGUAL    : "|="  > { System.out.println("OU bit‑a‑bit |=: "       + image); }
-    | < XOR_IGUAL       : "^="  > { System.out.println("XOR ^= : "               + image); }
-    | < IGUAL_IGUAL     : "=="  > { System.out.println("Igualdade ==: "          + image); }
-    | < DIFERENTE       : "!="  > { System.out.println("Diferença !=: "          + image); }
-    | < MAIOR_IGUAL     : ">="  > { System.out.println("Maior ou igual >=: "     + image); }
-    | < MENOR_IGUAL     : "<="  > { System.out.println("Menor ou igual <=: "     + image); }
-    | < E_LOGICO        : "&&"  > { System.out.println("E lógico &&: "           + image); }
-    | < OU_LOGICO       : "||"  > { System.out.println("OU lógico ||: "          + image); }
-    | < SOMA_IGUAL      : "+="  > { System.out.println("Soma e atribui +=: "     + image); }
-    | < SUB_IGUAL       : "-="  > { System.out.println("Subtrai e atribui -=: "  + image); }
-    | < MUL_IGUAL       : "*="  > { System.out.println("Multiplica e atribui *=: "+ image); }
-    | < DIV_IGUAL       : "/="  > { System.out.println("Divide e atribui /=: "   + image); }
-    | < MOD_IGUAL       : "%="  > { System.out.println("Módulo e atribui %=: "   + image); }
-    | < SETA            : "->"  > { System.out.println("Seta ->: "               + image); }
-    | < SETA_GORDA      : "=>"  > { System.out.println("Seta gorda =>: "         + image); }
-    | < IGUAL           : "="   > { System.out.println("Atribuição =: "          + image); }
-    | < MAIOR           : ">"   > { System.out.println("Maior >: "               + image); }
-    | < MENOR           : "<"   > { System.out.println("Menor <: "               + image); }
-    | < SOMA            : "+"   > { System.out.println("Soma +: "                + image); }
-    | < SUB             : "-"   > { System.out.println("Subtração -: "           + image); }
-    | < MUL             : "*"   > { System.out.println("Multiplicação *: "       + image); }
-    | < DIV             : "/"   > { System.out.println("Divisão /: "             + image); }
-    | < MOD_             : "%"   > { System.out.println("Módulo %: "              + image); }
-    | < E_BIT           : "&"   > { System.out.println("E bit‑a‑bit &: "         + image); }
-    | < OU_BIT          : "|"   > { System.out.println("OU bit‑a‑bit |: "        + image); }
-    | < XOR             : "^"   > { System.out.println("XOR ^: "                 + image); }
-    | < NEGACAO         : "!"   > { System.out.println("Negação !: "             + image); }
+      <IGUAL            : "=">  { System.out.println("Operador = : " + image); }
+    | <MAIS             : "+">  { System.out.println("Operador +: " + image); }
+    | <MENOS            : "-">  { System.out.println("Operador -: " + image); }
+    | <ASTERISCO        : "*">  { System.out.println("Operador *: " + image); }
+    | <BARRA            : "/">  { System.out.println("Operador /: " + image); }
+    | <PORCENTAGEM      : "%">  { System.out.println("Operador %: " + image); }
+    | <E_LOGICO         : "&&"> { System.out.println("Operador &&: " + image); }
+    | <OU_LOGICO        : "||"> { System.out.println("Operador ||: " + image); }
+    | <NEGACAO          : "!">  { System.out.println("Operador !: " + image); }
+    | <DUPLO_IGUAL      : "=="> { System.out.println("Operador ==: " + image); }
+    | <DIFERENTE        : "!="> { System.out.println("Operador !=: " + image); }
+    | <MAIOR            : "<">  { System.out.println("Operador <: " + image); }
+    | <MENOR            : ">">  { System.out.println("Operador >: " + image); }
+    | <MENOR_IGUAL      : "<="> { System.out.println("Operador <=: " + image); }
+    | <MAIOR_IGUAL      : ">="> { System.out.println("Operador >=: " + image); }
+    | <MAIS_IGUAL       : "+="> { System.out.println("Operador +=: " + image); }
+    | <MENOS_IGUAL      : "-="> { System.out.println("Operador -=: " + image); }
+    | <ASTERISCO_IGUAL  : "*="> { System.out.println("Operador *=: " + image); }
+    | <BARRA_IGUAL      : "/="> { System.out.println("Operador /=: " + image); }
+    | <PORCENTAGEM_IGUAL: "%="> { System.out.println("Operador %=: " + image); }
+    | <DUPLO_DOIS_PONTOS: "::"> { System.out.println("Operador de Escopo: " + image); }
+    | <E_COMERCIAL      : "&">  { System.out.println("Operador &: " + image); }
+    
 }
 
-
-
-// IDENTIFICADOR
-TOKEN:
-{
-    // letra é a-z, A-Z
-    <#LETRA: ["a"-"z", "A"-"Z"] >
-
-|   // dígito 0-9
-    <#DIGITO: ["0"-"9"] >
-
-|   // underscore "_"
-    <#UNDER: "_">
-
-}
-
-
-/* ============================================================
- *  IDENTIFICADOR
- * ============================================================ */
-
-
-TOKEN:
-{
-	 <IDENTIFICADOR: (<LETRA> | <UNDER>) ( <LETRA> | <DIGITO> | <UNDER> )*
-|    <LETRA> (<LETRA> | <DIGITO> | <UNDER>)* 
-
-|   
-    <UNDER> (<LETRA> | <DIGITO> | <UNDER>)* >
-    {
-        System.out.println("Identificador: " + image);
-    }
-}
-
-/* ============================================================
- *  LITERAIS NUMÉRICOS E STRINGS
- * ============================================================ */
-
-
+// Identificador ------------------------------------------
 TOKEN :
 {
-	 < INTEGER_LITERAL: <DECIMAL> >
-  		{
-    		System.out.println("Literal Int: " + image);
-  		}
-	| < #DECIMAL: (["+", "-"])? (["0"-"9"])+ >
+    <IDENTIFICADOR : <LETRA> (<LETRA> | <LETRA> | "_")* > { System.out.println("Identificador: " + image); }
+  | < #LETRA       : ["a"-"z", "A"-"Z"] >
+  | < #DIGITO      : ["0"-"9"] >
+}
 
-	| <FLOATING_LITERAL: (["+", "-"])? (["0"-"9"])+ "." (["0"-"9"])+ (["f","F"])? >
-  		{
-  		  System.out.println("Literal Ponto Flutuante: " + image);
-  		}
-	| < STRING_LITERAL: "\"" (~["\""] | "\\\"")* "\"" >
-  		{
-  		  System.out.println("Literal String: " + image);
-  		}
-	| < BOOL_LITERAL: ("!")? (<TRUE> | <FALSE>) >
-  		{
-  		  System.out.println("Literal Bool: " + image);
-  		}
+// Literais -----------------------------------------------
+TOKEN :
+{
+  	  < INTEGER_LITERAL : (["+", "-"])? (["0"-"9"])+ > { System.out.println("Literal Int: " + image); }
+
+  	  | <FLOAT_LITERAL  : (["+", "-"])? (["0"-"9"])+ "." (["0"-"9"])+ > { System.out.println("Literal Ponto Flutuante: " + image); }
+
+  	  | < STRING_LITERAL: "\"" (~["\""] | "\\\"")* "\"" > { System.out.println("Literal String: " + image); }
+
+  	  | < BOOL_LITERAL  : ("!")? (<TRUE> | <FALSE>) > { System.out.println("Literal Bool: " + image); }
+}
+
+/**********************************
+ * REGFRAS GRAMATICAIS SINTATICAS *
+ **********************************/
+
+// RUN: ponto de entrada geral do parser. Analisa um programa inteiro até o EOF.
+void RUN() : {}
+{
+    Programa() <EOF>
 }
 
 
-/* ============================================================
- *  GRAMATICA DA LINGUAGEM RUST
- * ============================================================ */
-
-
-//Declarando um programa
-void RUN(): { } {
-    Programa() 
-}
-
-//O programa pode importar bibliotecas/ bibliotecas + funçoes / funçoes
-void Programa(): { } {
-    ( DeclararImport() )* ( DeclararFuncao() )*
-}
-
-//Declarando bibliotecas em rust
-void DeclararImport(): { } {
-    <USE> <IDENTIFICADOR> ( <DUPLO_DOIS_PONTOS> <IDENTIFICADOR> )* <PONTO_VIRGULA>
-}
-
-//Declarando função 
-void DeclararFuncao(): { } {
-    <FN> <IDENTIFICADOR> ((<ABRE_PAR> ListaParametros() <FECHA_PAR>)| <PARENTESES>)  (TipoRetorno())? Bloco()
-}
-
-//Lista de Parametros de entrada de uma função
-void ListaParametros(): { } {
-    ( Parametro() ( <VIRGULA> Parametro() )* )?
-}
-
-//Parametro
-void Parametro(): { } {
-    <IDENTIFICADOR> <DOIS_PONTOS> TipoDeDados()
-}
-
-//Tipo de retorno (->)
-void TipoRetorno(): { } {
-    <SETA> TipoDeDados()
-}
-
-//Declarando a estrutura do bloco do corpo da função
-void Bloco(): { } {
-    <ABRE_CHAVE> ( CorpoDaDeclaracao() )* (ExpressaoRetorno())? <FECHA_CHAVE>
+/*******************************************************************
+ * Programa: lista de itens de topo (funções, variáveis, imports). *
+ * Exemplo Rust:                                                   * 
+ * use std::io;                                                    *
+ * fn main() {}                                                    *
+ *******************************************************************/
+void Programa() : {}
+{
+    ( Item() )*
 }
 
 
-//Declarando o corpo da declaração
-void CorpoDaDeclaracao(): {} {
-     DeclararVariavel()
-    |Println()
+/****************************************************************************
+ * Item: representa cada construção de topo do arquivo.                     *
+ * Pode ser um import, função, declaração de variável ou expressão isolada. *
+ ****************************************************************************/
+void Item() : {}
+{
+      ImportBiblioteca()
+    | LOOKAHEAD(2) DeclaracaoMain()
+    | DeclaracaoFuncao()
+    | DeclaracaoVariavel()
+    | Sentenca()
 }
 
-//Declarando o println de RUST
-void Println(): {} {
-    <PRINTLN> <ABRE_PAR> (<STRING_LITERAL> (<VIRGULA> (<IDENTIFICADOR> | Expressao()))?)? <FECHA_PAR> <PONTO_VIRGULA> 
+/****************************************************************
+ * ImportBiblioteca: declaração "use" para importar nomes ou módulos. *
+ * Exemplo: use std::io;                                        *
+ ****************************************************************/
+void ImportBiblioteca() : {}
+{
+    <USE> CaminhoImportacao() <PONTO_VIRGULA>
 }
 
-//Expressões
-void Expressao() : {} {
-    <INTEGER_LITERAL> 
-  | <FLOATING_LITERAL> 
-  | <STRING_LITERAL> 
-  | <BOOL_LITERAL> 
-  | <IDENTIFICADOR>
+// Caminho separado por "::" → Exp.: std::io
+void CaminhoImportacao() : {}
+{
+    <IDENTIFICADOR> ( <DUPLO_DOIS_PONTOS> <IDENTIFICADOR> )*
 }
 
-//Declarar variavel 
-void DeclararVariavel() : {} {
-    <LET> (<MUT>)? <IDENTIFICADOR> (<DOIS_PONTOS> TipoDeDados() )? ( <IGUAL> Expressao() )? <PONTO_VIRGULA>
+/************************
+ * Declaração de Função *                                   
+ ************************/
+
+
+void DeclaracaoMain() : {}
+{
+    <FN> <MAIN> <ABRE_PARENTESES> <FECHA_PARENTESES> Bloco()
+}
+// Define uma função com parâmetros, tipo de retorno e corpo → Exp.: fn soma(a: i32, b: i32) -> i32 { a + b }
+void DeclaracaoFuncao() : {}
+{
+    <FN> <IDENTIFICADOR> <ABRE_PARENTESES> ListaParametros() <FECHA_PARENTESES> TipoRetorno() Bloco()
 }
 
-//Tipos de dados
-void TipoDeDados() : {} {
-      <I8> | <I16> | <I32> | <I64> | <ISIZE>
-    | <U8> | <U16> | <U32> | <U64> | <USIZE>
+// Zero ou mais parâmetros separados por vírgula → Exp.: ""  (vazio)  |  x: i32, y: i32
+void ListaParametros() : {}
+{
+    (Parametro() (<VIRGULA> Parametro())* )?
+}
+
+// Par (identificador : tipo) → Exp: valor: f64
+void Parametro() : {}
+{
+    <IDENTIFICADOR> <DOIS_PONTOS> Tipo()
+}
+// Seta "->" seguida de tipo → Exp.: (a: i32, b: i32) -> i32 { < code > }
+void TipoRetorno() : {}
+{
+    ( <SETA> Tipo() )?
+}
+
+
+// tipos primitivos da linguagem Rust
+void Tipo() : {} {
+      <I8> | <I16> | <I32> | <I64>
+    | <U8> | <U16> | <U32> | <U64>
     | <F32> | <F64>
-    | <BOOL_TYPE>
-    | <STRING_TYPE> | <STR_TYPE>
+    | <BOOL_TYPE> | < CHAR_TYPE >
+    | <STRING_TYPE>
 }
 
-//Retorno explícito/implícito de uma função
-void ExpressaoRetorno(): { } {
-    <RETURN> Expressao() <PONTO_VIRGULA>        
-  | ExpressaoSemPontoVirgula()                 
+/**************************
+ * Declaração de Variável *                               
+ **************************/
+
+// Declara variável → Exp.: let mut nome_var: i32 = 10;
+void DeclaracaoVariavel() : {}
+{
+    <LET> ( <MUT> )? <IDENTIFICADOR> ( <DOIS_PONTOS> Tipo() )? ( <IGUAL> Expressao() )? <PONTO_VIRGULA>
 }
 
-//Retorno implícito de uma função 
-void ExpressaoSemPontoVirgula(): { } {
-    Expressao()
+/********************************
+ * Bloco e Declarações internas *
+ ********************************/
+
+// Sequência de comandos delimitada por chaves → Exp.: { <code> }
+void Bloco() : {}
+{
+    <ABRE_CHAVES> (CorpoDeDeclaracao())* <FECHA_CHAVES>
+}
+
+// Declarações ou instruções possíveis dentro de um bloco.
+void CorpoDeDeclaracao() : {}
+{
+      While()
+    | Condicional()
+    | Return()
+    | Print()
+    | DeclaracaoVariavel()
+    | LOOKAHEAD(2) Input()
+    | Sentenca()
+    
+}
+
+// A expressão seguida de ponto e vírgula → Exp.: x + 1;
+void Sentenca() : {}
+{
+    Expressao() <PONTO_VIRGULA>
+}
+
+/*************************
+ * Estrutura de Controle *                                
+ *************************/
+
+// Laço "while" com condição () opcional → Exp.: while x < 10 { ... }
+void While() : {}
+{
+    <WHILE> (<ABRE_PARENTESES>)? Expressao() (<FECHA_PARENTESES>)? Bloco()
+}
+
+// Condicional if/else if/else → Exp.: if n == 0 { ... } else if { ... } else { ... }
+void Condicional() : {}
+{
+    <IF> (<ABRE_PARENTESES>)? Expressao() (<FECHA_PARENTESES>)? Bloco() (<ELSE_IF> (<ABRE_PARENTESES>)? Expressao() (<FECHA_PARENTESES>)? Bloco())* (<ELSE> Bloco())?
+}
+
+/*******************
+ * ENTRADA E SAIDA *
+ *******************/
+
+
+void Print() : {}
+{
+    (<PRINT> | <PRINTLN>) <ABRE_PARENTESES> (ListaArgumentos()) <FECHA_PARENTESES> <PONTO_VIRGULA>
+}
+
+// let res = 10 ... print!("resultado = {}", res);
+void ListaArgumentos() : {}
+{
+    (Expressao() (<VIRGULA> Expressao())* )?
+}
+
+// Input em Rust → Exp:. io::stdin().read_line(&mut linha).unwrap();
+void Input() : {}
+{
+    <IDENTIFICADOR> <DUPLO_DOIS_PONTOS> <IDENTIFICADOR> <ABRE_PARENTESES> <FECHA_PARENTESES>
+    <PONTO> <READLINE> <ABRE_PARENTESES> <E_COMERCIAL> <MUT> <IDENTIFICADOR> <FECHA_PARENTESES>
+    (<PONTO> <IDENTIFICADOR> <ABRE_PARENTESES> <STRING_LITERAL> <FECHA_PARENTESES>)* <PONTO_VIRGULA>
+}
+
+/**************
+ * EXPRESSÕES *
+ **************/
+
+void Expressao() : {}
+{
+    Atribuicao()
+}
+
+void Atribuicao() : {}
+{
+    OuLogico() ( OperadorAtribuicao() OuLogico() )?
+}
+
+// Lista de operadores de atribuição (=, +=, -=, ...)
+void OperadorAtribuicao() : {}
+{
+      <IGUAL>
+    | <MAIS_IGUAL>
+    | <MENOS_IGUAL>
+    | <ASTERISCO_IGUAL>
+    | <BARRA_IGUAL>
+    | <PORCENTAGEM_IGUAL>
+}
+
+// Expressão com operador lógico ||
+void OuLogico() : {}
+{
+    ELogico() ( <OU_LOGICO> ELogico() )*
+}
+
+// Expressão com operador lógico &&
+void ELogico() : {}
+{
+    Igualdade() ( <E_LOGICO> Igualdade() )*
+}
+
+// Igualdade → comparação == ou !=.
+void Igualdade() : {}
+{
+    Relacional() ( ( <DUPLO_IGUAL> | <DIFERENTE> ) Relacional() )*
+}
+
+// Comparação → <, <=, >, >
+void Relacional() : {}
+{
+    Aritmetica() ( ( <MAIOR> | <MENOR_IGUAL> | <MENOR> | <MAIOR_IGUAL> ) Aritmetica() )*
+}
+
+// Soma e subtração → Exp: a + b - 3
+void Aritmetica() : {}
+{
+    Termo() ( ( <MAIS> | <MENOS> ) Termo() )*
+}
+
+//Multiplicação, divisão e módulo → Exp: n * 2 / m
+void Termo() : {}
+{
+    Fator() ( ( <ASTERISCO> | <BARRA> | <PORCENTAGEM> ) Fator() )*
 }
 
 
+/************************************************************************************
+ * Define os elementos mais simples em Rust                                         *
+ * Respeitar a precedência: parênteses, unário, literais ou chamadas                *
+ * → Exp: (x) > Simbolos: -! > *, /, %, ... > + ou - > Comparação; ==, !=, &&, ', = *
+ ************************************************************************************/
+void Fator() : {}
+{
+      <ABRE_PARENTESES> Expressao() <FECHA_PARENTESES>
+    | <MENOS> Fator()
+    | <NEGACAO> Fator()
+    | Literal()
+    | VariavelOuChamada()
+}
 
+/***********************************************************************************************
+ * Reconhece uma variável ou uma chamada de função.                                            *
+ * Primeiro, lê um identificador (que pode ser simples ou com caminho tipo módulo::submódulo). *
+ * Em seguida, opcionalmente, lê os parênteses com argumentos.                                 *
+ * Se existirem parênteses, trata como chamada de função; caso contrário, como variável.       *
+ ***********************************************************************************************/
+void VariavelOuChamada() : {}
+{
+    IdentComCaminho() ( <ABRE_PARENTESES> ListaArgumentos() <FECHA_PARENTESES> )? 
+}
 
+// Para indentificar o Input de Rust → String::new;
+void IdentComCaminho() : {}
+{
+    ( <IDENTIFICADOR> | <STRING_TYPE> )
+    ( <DUPLO_DOIS_PONTOS> <IDENTIFICADOR> )*
+}
 
+// Valores literais suportados → Exp.: 123, 3.14, "texto", true
+void Literal() : {}
+{
+      <INTEGER_LITERAL>
+    | <FLOAT_LITERAL>
+    | <STRING_LITERAL>
+    | <TRUE>
+    | <FALSE>
+}
 
-
+// Instrução de retorno de função.
+void Return() : {}
+{
+    <RETURN> Expressao() <PONTO_VIRGULA>
+}

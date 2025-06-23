@@ -25,22 +25,39 @@ public class RustGrammar implements RustGrammarConstants {
         }
     }
 
-/* ============================================================
- *  GRAMATICA DA LINGUAGEM RUST
- * ============================================================ */
+/**********************************
+ * REGFRAS GRAMATICAIS SINTATICAS *
+ **********************************/
 
-
-//Declarando um programa
+// RUN: ponto de entrada geral do parser. Analisa um programa inteiro até o EOF.
   static final public void RUN() throws ParseException {
     Programa();
+    jj_consume_token(0);
 }
 
-//O programa pode importar bibliotecas/ bibliotecas + funçoes / funçoes
+/*******************************************************************
+ * Programa: lista de itens de topo (funções, variáveis, imports). *
+ * Exemplo Rust:                                                   * 
+ * use std::io;                                                    *
+ * fn main() {}                                                    *
+ *******************************************************************/
   static final public void Programa() throws ParseException {
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case USE:{
+      case FN:
+      case LET:
+      case TRUE:
+      case FALSE:
+      case USE:
+      case STRING_TYPE:
+      case ABRE_PARENTESES:
+      case MENOS:
+      case NEGACAO:
+      case IDENTIFICADOR:
+      case INTEGER_LITERAL:
+      case FLOAT_LITERAL:
+      case STRING_LITERAL:{
         ;
         break;
         }
@@ -48,28 +65,70 @@ public class RustGrammar implements RustGrammarConstants {
         jj_la1[0] = jj_gen;
         break label_1;
       }
-      DeclararImport();
-    }
-    label_2:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case FN:{
-        ;
-        break;
-        }
-      default:
-        jj_la1[1] = jj_gen;
-        break label_2;
-      }
-      DeclararFuncao();
+      Item();
     }
 }
 
-//Declarando bibliotecas em rust
-  static final public void DeclararImport() throws ParseException {
+/****************************************************************************
+ * Item: representa cada construção de topo do arquivo.                     *
+ * Pode ser um import, função, declaração de variável ou expressão isolada. *
+ ****************************************************************************/
+  static final public void Item() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case USE:{
+      ImportBiblioteca();
+      break;
+      }
+    default:
+      jj_la1[1] = jj_gen;
+      if (jj_2_1(2)) {
+        DeclaracaoMain();
+      } else {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case FN:{
+          DeclaracaoFuncao();
+          break;
+          }
+        case LET:{
+          DeclaracaoVariavel();
+          break;
+          }
+        case TRUE:
+        case FALSE:
+        case STRING_TYPE:
+        case ABRE_PARENTESES:
+        case MENOS:
+        case NEGACAO:
+        case IDENTIFICADOR:
+        case INTEGER_LITERAL:
+        case FLOAT_LITERAL:
+        case STRING_LITERAL:{
+          Sentenca();
+          break;
+          }
+        default:
+          jj_la1[2] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
+    }
+}
+
+/****************************************************************
+ * ImportBiblioteca: declaração "use" para importar nomes ou módulos. *
+ * Exemplo: use std::io;                                        *
+ ****************************************************************/
+  static final public void ImportBiblioteca() throws ParseException {
     jj_consume_token(USE);
+    CaminhoImportacao();
+    jj_consume_token(PONTO_VIRGULA);
+}
+
+// Caminho separado por "::" → Exp.: std::io
+  static final public void CaminhoImportacao() throws ParseException {
     jj_consume_token(IDENTIFICADOR);
-    label_3:
+    label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case DUPLO_DOIS_PONTOS:{
@@ -77,53 +136,44 @@ public class RustGrammar implements RustGrammarConstants {
         break;
         }
       default:
-        jj_la1[2] = jj_gen;
-        break label_3;
+        jj_la1[3] = jj_gen;
+        break label_2;
       }
       jj_consume_token(DUPLO_DOIS_PONTOS);
       jj_consume_token(IDENTIFICADOR);
     }
-    jj_consume_token(PONTO_VIRGULA);
 }
 
-//Declarando função 
-  static final public void DeclararFuncao() throws ParseException {
+/************************
+ * Declaração de Função *                                   
+ ************************/
+  static final public 
+
+void DeclaracaoMain() throws ParseException {
     jj_consume_token(FN);
-    jj_consume_token(IDENTIFICADOR);
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case ABRE_PAR:{
-      jj_consume_token(ABRE_PAR);
-      ListaParametros();
-      jj_consume_token(FECHA_PAR);
-      break;
-      }
-    case PARENTESES:{
-      jj_consume_token(PARENTESES);
-      break;
-      }
-    default:
-      jj_la1[3] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case SETA:{
-      TipoRetorno();
-      break;
-      }
-    default:
-      jj_la1[4] = jj_gen;
-      ;
-    }
+    jj_consume_token(MAIN);
+    jj_consume_token(ABRE_PARENTESES);
+    jj_consume_token(FECHA_PARENTESES);
     Bloco();
 }
 
-//Lista de Parametros de entrada de uma função
+// Define uma função com parâmetros, tipo de retorno e corpo → Exp.: fn soma(a: i32, b: i32) -> i32 { a + b }
+  static final public void DeclaracaoFuncao() throws ParseException {
+    jj_consume_token(FN);
+    jj_consume_token(IDENTIFICADOR);
+    jj_consume_token(ABRE_PARENTESES);
+    ListaParametros();
+    jj_consume_token(FECHA_PARENTESES);
+    TipoRetorno();
+    Bloco();
+}
+
+// Zero ou mais parâmetros separados por vírgula → Exp.: ""  (vazio)  |  x: i32, y: i32
   static final public void ListaParametros() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case IDENTIFICADOR:{
       Parametro();
-      label_4:
+      label_3:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case VIRGULA:{
@@ -131,12 +181,33 @@ public class RustGrammar implements RustGrammarConstants {
           break;
           }
         default:
-          jj_la1[5] = jj_gen;
-          break label_4;
+          jj_la1[4] = jj_gen;
+          break label_3;
         }
         jj_consume_token(VIRGULA);
         Parametro();
       }
+      break;
+      }
+    default:
+      jj_la1[5] = jj_gen;
+      ;
+    }
+}
+
+// Par (identificador : tipo) → Exp: valor: f64
+  static final public void Parametro() throws ParseException {
+    jj_consume_token(IDENTIFICADOR);
+    jj_consume_token(DOIS_PONTOS);
+    Tipo();
+}
+
+// Seta "->" seguida de tipo → Exp.: (a: i32, b: i32) -> i32 { < code > }
+  static final public void TipoRetorno() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case SETA:{
+      jj_consume_token(SETA);
+      Tipo();
       break;
       }
     default:
@@ -145,182 +216,8 @@ public class RustGrammar implements RustGrammarConstants {
     }
 }
 
-//Parametro
-  static final public void Parametro() throws ParseException {
-    jj_consume_token(IDENTIFICADOR);
-    jj_consume_token(DOIS_PONTOS);
-    TipoDeDados();
-}
-
-//Tipo de retorno (->)
-  static final public void TipoRetorno() throws ParseException {
-    jj_consume_token(SETA);
-    TipoDeDados();
-}
-
-//Declarando a estrutura do bloco do corpo da função
-  static final public void Bloco() throws ParseException {
-    jj_consume_token(ABRE_CHAVE);
-    label_5:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case LET:
-      case PRINTLN:{
-        ;
-        break;
-        }
-      default:
-        jj_la1[7] = jj_gen;
-        break label_5;
-      }
-      CorpoDaDeclaracao();
-    }
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case RETURN:
-    case IDENTIFICADOR:
-    case INTEGER_LITERAL:
-    case FLOATING_LITERAL:
-    case STRING_LITERAL:
-    case BOOL_LITERAL:{
-      ExpressaoRetorno();
-      break;
-      }
-    default:
-      jj_la1[8] = jj_gen;
-      ;
-    }
-    jj_consume_token(FECHA_CHAVE);
-}
-
-//Declarando o corpo da declaração
-  static final public void CorpoDaDeclaracao() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case LET:{
-      DeclararVariavel();
-      break;
-      }
-    case PRINTLN:{
-      Println();
-      break;
-      }
-    default:
-      jj_la1[9] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-}
-
-//Declarando o println de RUST
-  static final public void Println() throws ParseException {
-    jj_consume_token(PRINTLN);
-    jj_consume_token(ABRE_PAR);
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case STRING_LITERAL:{
-      jj_consume_token(STRING_LITERAL);
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case VIRGULA:{
-        jj_consume_token(VIRGULA);
-        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-        case IDENTIFICADOR:{
-          jj_consume_token(IDENTIFICADOR);
-          break;
-          }
-        case INTEGER_LITERAL:
-        case FLOATING_LITERAL:
-        case STRING_LITERAL:
-        case BOOL_LITERAL:{
-          Expressao();
-          break;
-          }
-        default:
-          jj_la1[10] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-        break;
-        }
-      default:
-        jj_la1[11] = jj_gen;
-        ;
-      }
-      break;
-      }
-    default:
-      jj_la1[12] = jj_gen;
-      ;
-    }
-    jj_consume_token(FECHA_PAR);
-    jj_consume_token(PONTO_VIRGULA);
-}
-
-//Expressões
-  static final public void Expressao() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case INTEGER_LITERAL:{
-      jj_consume_token(INTEGER_LITERAL);
-      break;
-      }
-    case FLOATING_LITERAL:{
-      jj_consume_token(FLOATING_LITERAL);
-      break;
-      }
-    case STRING_LITERAL:{
-      jj_consume_token(STRING_LITERAL);
-      break;
-      }
-    case BOOL_LITERAL:{
-      jj_consume_token(BOOL_LITERAL);
-      break;
-      }
-    case IDENTIFICADOR:{
-      jj_consume_token(IDENTIFICADOR);
-      break;
-      }
-    default:
-      jj_la1[13] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-}
-
-//Declarar variavel 
-  static final public void DeclararVariavel() throws ParseException {
-    jj_consume_token(LET);
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case MUT:{
-      jj_consume_token(MUT);
-      break;
-      }
-    default:
-      jj_la1[14] = jj_gen;
-      ;
-    }
-    jj_consume_token(IDENTIFICADOR);
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case DOIS_PONTOS:{
-      jj_consume_token(DOIS_PONTOS);
-      TipoDeDados();
-      break;
-      }
-    default:
-      jj_la1[15] = jj_gen;
-      ;
-    }
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case IGUAL:{
-      jj_consume_token(IGUAL);
-      Expressao();
-      break;
-      }
-    default:
-      jj_la1[16] = jj_gen;
-      ;
-    }
-    jj_consume_token(PONTO_VIRGULA);
-}
-
-//Tipos de dados
-  static final public void TipoDeDados() throws ParseException {
+// tipos primitivos da linguagem Rust
+  static final public void Tipo() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case I8:{
       jj_consume_token(I8);
@@ -336,10 +233,6 @@ public class RustGrammar implements RustGrammarConstants {
       }
     case I64:{
       jj_consume_token(I64);
-      break;
-      }
-    case ISIZE:{
-      jj_consume_token(ISIZE);
       break;
       }
     case U8:{
@@ -358,10 +251,6 @@ public class RustGrammar implements RustGrammarConstants {
       jj_consume_token(U64);
       break;
       }
-    case USIZE:{
-      jj_consume_token(USIZE);
-      break;
-      }
     case F32:{
       jj_consume_token(F32);
       break;
@@ -374,49 +263,770 @@ public class RustGrammar implements RustGrammarConstants {
       jj_consume_token(BOOL_TYPE);
       break;
       }
+    case CHAR_TYPE:{
+      jj_consume_token(CHAR_TYPE);
+      break;
+      }
     case STRING_TYPE:{
       jj_consume_token(STRING_TYPE);
       break;
       }
-    case STR_TYPE:{
-      jj_consume_token(STR_TYPE);
+    default:
+      jj_la1[7] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+}
+
+/**************************
+ * Declaração de Variável *                               
+ **************************/
+
+// Declara variável → Exp.: let mut nome_var: i32 = 10;
+  static final public void DeclaracaoVariavel() throws ParseException {
+    jj_consume_token(LET);
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case MUT:{
+      jj_consume_token(MUT);
+      break;
+      }
+    default:
+      jj_la1[8] = jj_gen;
+      ;
+    }
+    jj_consume_token(IDENTIFICADOR);
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case DOIS_PONTOS:{
+      jj_consume_token(DOIS_PONTOS);
+      Tipo();
+      break;
+      }
+    default:
+      jj_la1[9] = jj_gen;
+      ;
+    }
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case IGUAL:{
+      jj_consume_token(IGUAL);
+      Expressao();
+      break;
+      }
+    default:
+      jj_la1[10] = jj_gen;
+      ;
+    }
+    jj_consume_token(PONTO_VIRGULA);
+}
+
+/********************************
+ * Bloco e Declarações internas *
+ ********************************/
+
+// Sequência de comandos delimitada por chaves → Exp.: { <code> }
+  static final public void Bloco() throws ParseException {
+    jj_consume_token(ABRE_CHAVES);
+    label_4:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case LET:
+      case IF:
+      case WHILE:
+      case TRUE:
+      case FALSE:
+      case PRINT:
+      case PRINTLN:
+      case RETURN:
+      case STRING_TYPE:
+      case ABRE_PARENTESES:
+      case MENOS:
+      case NEGACAO:
+      case IDENTIFICADOR:
+      case INTEGER_LITERAL:
+      case FLOAT_LITERAL:
+      case STRING_LITERAL:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[11] = jj_gen;
+        break label_4;
+      }
+      CorpoDeDeclaracao();
+    }
+    jj_consume_token(FECHA_CHAVES);
+}
+
+// Declarações ou instruções possíveis dentro de um bloco.
+  static final public void CorpoDeDeclaracao() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case WHILE:{
+      While();
+      break;
+      }
+    case IF:{
+      Condicional();
+      break;
+      }
+    case RETURN:{
+      Return();
+      break;
+      }
+    case PRINT:
+    case PRINTLN:{
+      Print();
+      break;
+      }
+    case LET:{
+      DeclaracaoVariavel();
+      break;
+      }
+    default:
+      jj_la1[12] = jj_gen;
+      if (jj_2_2(2)) {
+        Input();
+      } else {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case TRUE:
+        case FALSE:
+        case STRING_TYPE:
+        case ABRE_PARENTESES:
+        case MENOS:
+        case NEGACAO:
+        case IDENTIFICADOR:
+        case INTEGER_LITERAL:
+        case FLOAT_LITERAL:
+        case STRING_LITERAL:{
+          Sentenca();
+          break;
+          }
+        default:
+          jj_la1[13] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
+    }
+}
+
+// A expressão seguida de ponto e vírgula → Exp.: x + 1;
+  static final public void Sentenca() throws ParseException {
+    Expressao();
+    jj_consume_token(PONTO_VIRGULA);
+}
+
+/*************************
+ * Estrutura de Controle *                                
+ *************************/
+
+// Laço "while" com condição () opcional → Exp.: while x < 10 { ... }
+  static final public void While() throws ParseException {
+    jj_consume_token(WHILE);
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case ABRE_PARENTESES:{
+      jj_consume_token(ABRE_PARENTESES);
+      break;
+      }
+    default:
+      jj_la1[14] = jj_gen;
+      ;
+    }
+    Expressao();
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case FECHA_PARENTESES:{
+      jj_consume_token(FECHA_PARENTESES);
+      break;
+      }
+    default:
+      jj_la1[15] = jj_gen;
+      ;
+    }
+    Bloco();
+}
+
+// Condicional if/else if/else → Exp.: if n == 0 { ... } else if { ... } else { ... }
+  static final public void Condicional() throws ParseException {
+    jj_consume_token(IF);
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case ABRE_PARENTESES:{
+      jj_consume_token(ABRE_PARENTESES);
+      break;
+      }
+    default:
+      jj_la1[16] = jj_gen;
+      ;
+    }
+    Expressao();
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case FECHA_PARENTESES:{
+      jj_consume_token(FECHA_PARENTESES);
       break;
       }
     default:
       jj_la1[17] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
+      ;
     }
-}
-
-//Retorno explícito/implícito de uma função
-  static final public void ExpressaoRetorno() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case RETURN:{
-      jj_consume_token(RETURN);
-      Expressao();
-      jj_consume_token(PONTO_VIRGULA);
-      break;
+    Bloco();
+    label_5:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case ELSE_IF:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[18] = jj_gen;
+        break label_5;
       }
-    case IDENTIFICADOR:
-    case INTEGER_LITERAL:
-    case FLOATING_LITERAL:
-    case STRING_LITERAL:
-    case BOOL_LITERAL:{
-      ExpressaoSemPontoVirgula();
+      jj_consume_token(ELSE_IF);
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case ABRE_PARENTESES:{
+        jj_consume_token(ABRE_PARENTESES);
+        break;
+        }
+      default:
+        jj_la1[19] = jj_gen;
+        ;
+      }
+      Expressao();
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case FECHA_PARENTESES:{
+        jj_consume_token(FECHA_PARENTESES);
+        break;
+        }
+      default:
+        jj_la1[20] = jj_gen;
+        ;
+      }
+      Bloco();
+    }
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case ELSE:{
+      jj_consume_token(ELSE);
+      Bloco();
       break;
       }
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[21] = jj_gen;
+      ;
+    }
+}
+
+/*******************
+ * ENTRADA E SAIDA *
+ *******************/
+  static final public 
+
+void Print() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case PRINT:{
+      jj_consume_token(PRINT);
+      break;
+      }
+    case PRINTLN:{
+      jj_consume_token(PRINTLN);
+      break;
+      }
+    default:
+      jj_la1[22] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(ABRE_PARENTESES);
+    ListaArgumentos();
+    jj_consume_token(FECHA_PARENTESES);
+    jj_consume_token(PONTO_VIRGULA);
+}
+
+// let res = 10 ... print!("resultado = {}", res);
+  static final public void ListaArgumentos() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case TRUE:
+    case FALSE:
+    case STRING_TYPE:
+    case ABRE_PARENTESES:
+    case MENOS:
+    case NEGACAO:
+    case IDENTIFICADOR:
+    case INTEGER_LITERAL:
+    case FLOAT_LITERAL:
+    case STRING_LITERAL:{
+      Expressao();
+      label_6:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case VIRGULA:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[23] = jj_gen;
+          break label_6;
+        }
+        jj_consume_token(VIRGULA);
+        Expressao();
+      }
+      break;
+      }
+    default:
+      jj_la1[24] = jj_gen;
+      ;
+    }
+}
+
+// Input em Rust → Exp:. io::stdin().read_line(&mut linha).unwrap();
+  static final public void Input() throws ParseException {
+    jj_consume_token(IDENTIFICADOR);
+    jj_consume_token(DUPLO_DOIS_PONTOS);
+    jj_consume_token(IDENTIFICADOR);
+    jj_consume_token(ABRE_PARENTESES);
+    jj_consume_token(FECHA_PARENTESES);
+    jj_consume_token(PONTO);
+    jj_consume_token(READLINE);
+    jj_consume_token(ABRE_PARENTESES);
+    jj_consume_token(E_COMERCIAL);
+    jj_consume_token(MUT);
+    jj_consume_token(IDENTIFICADOR);
+    jj_consume_token(FECHA_PARENTESES);
+    label_7:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case PONTO:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[25] = jj_gen;
+        break label_7;
+      }
+      jj_consume_token(PONTO);
+      jj_consume_token(IDENTIFICADOR);
+      jj_consume_token(ABRE_PARENTESES);
+      jj_consume_token(STRING_LITERAL);
+      jj_consume_token(FECHA_PARENTESES);
+    }
+    jj_consume_token(PONTO_VIRGULA);
+}
+
+/**************
+ * EXPRESSÕES *
+ **************/
+  static final public 
+void Expressao() throws ParseException {
+    Atribuicao();
+}
+
+  static final public void Atribuicao() throws ParseException {
+    OuLogico();
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case IGUAL:
+    case MAIS_IGUAL:
+    case MENOS_IGUAL:
+    case ASTERISCO_IGUAL:
+    case BARRA_IGUAL:
+    case PORCENTAGEM_IGUAL:{
+      OperadorAtribuicao();
+      OuLogico();
+      break;
+      }
+    default:
+      jj_la1[26] = jj_gen;
+      ;
+    }
+}
+
+// Lista de operadores de atribuição (=, +=, -=, ...)
+  static final public void OperadorAtribuicao() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case IGUAL:{
+      jj_consume_token(IGUAL);
+      break;
+      }
+    case MAIS_IGUAL:{
+      jj_consume_token(MAIS_IGUAL);
+      break;
+      }
+    case MENOS_IGUAL:{
+      jj_consume_token(MENOS_IGUAL);
+      break;
+      }
+    case ASTERISCO_IGUAL:{
+      jj_consume_token(ASTERISCO_IGUAL);
+      break;
+      }
+    case BARRA_IGUAL:{
+      jj_consume_token(BARRA_IGUAL);
+      break;
+      }
+    case PORCENTAGEM_IGUAL:{
+      jj_consume_token(PORCENTAGEM_IGUAL);
+      break;
+      }
+    default:
+      jj_la1[27] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
 }
 
-//Retorno implícito de uma função 
-  static final public void ExpressaoSemPontoVirgula() throws ParseException {
-    Expressao();
+// Expressão com operador lógico ||
+  static final public void OuLogico() throws ParseException {
+    ELogico();
+    label_8:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case OU_LOGICO:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[28] = jj_gen;
+        break label_8;
+      }
+      jj_consume_token(OU_LOGICO);
+      ELogico();
+    }
 }
+
+// Expressão com operador lógico &&
+  static final public void ELogico() throws ParseException {
+    Igualdade();
+    label_9:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case E_LOGICO:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[29] = jj_gen;
+        break label_9;
+      }
+      jj_consume_token(E_LOGICO);
+      Igualdade();
+    }
+}
+
+// Igualdade → comparação == ou !=.
+  static final public void Igualdade() throws ParseException {
+    Relacional();
+    label_10:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case DUPLO_IGUAL:
+      case DIFERENTE:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[30] = jj_gen;
+        break label_10;
+      }
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case DUPLO_IGUAL:{
+        jj_consume_token(DUPLO_IGUAL);
+        break;
+        }
+      case DIFERENTE:{
+        jj_consume_token(DIFERENTE);
+        break;
+        }
+      default:
+        jj_la1[31] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      Relacional();
+    }
+}
+
+// Comparação → <, <=, >, >
+  static final public void Relacional() throws ParseException {
+    Aritmetica();
+    label_11:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case MAIOR:
+      case MENOR:
+      case MENOR_IGUAL:
+      case MAIOR_IGUAL:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[32] = jj_gen;
+        break label_11;
+      }
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case MAIOR:{
+        jj_consume_token(MAIOR);
+        break;
+        }
+      case MENOR_IGUAL:{
+        jj_consume_token(MENOR_IGUAL);
+        break;
+        }
+      case MENOR:{
+        jj_consume_token(MENOR);
+        break;
+        }
+      case MAIOR_IGUAL:{
+        jj_consume_token(MAIOR_IGUAL);
+        break;
+        }
+      default:
+        jj_la1[33] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      Aritmetica();
+    }
+}
+
+// Soma e subtração → Exp: a + b - 3
+  static final public void Aritmetica() throws ParseException {
+    Termo();
+    label_12:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case MAIS:
+      case MENOS:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[34] = jj_gen;
+        break label_12;
+      }
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case MAIS:{
+        jj_consume_token(MAIS);
+        break;
+        }
+      case MENOS:{
+        jj_consume_token(MENOS);
+        break;
+        }
+      default:
+        jj_la1[35] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      Termo();
+    }
+}
+
+//Multiplicação, divisão e módulo → Exp: n * 2 / m
+  static final public void Termo() throws ParseException {
+    Fator();
+    label_13:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case ASTERISCO:
+      case BARRA:
+      case PORCENTAGEM:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[36] = jj_gen;
+        break label_13;
+      }
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case ASTERISCO:{
+        jj_consume_token(ASTERISCO);
+        break;
+        }
+      case BARRA:{
+        jj_consume_token(BARRA);
+        break;
+        }
+      case PORCENTAGEM:{
+        jj_consume_token(PORCENTAGEM);
+        break;
+        }
+      default:
+        jj_la1[37] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      Fator();
+    }
+}
+
+/************************************************************************************
+ * Define os elementos mais simples em Rust                                         *
+ * Respeitar a precedência: parênteses, unário, literais ou chamadas                *
+ * → Exp: (x) > Simbolos: -! > *, /, %, ... > + ou - > Comparação; ==, !=, &&, ', = *
+ ************************************************************************************/
+  static final public void Fator() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case ABRE_PARENTESES:{
+      jj_consume_token(ABRE_PARENTESES);
+      Expressao();
+      jj_consume_token(FECHA_PARENTESES);
+      break;
+      }
+    case MENOS:{
+      jj_consume_token(MENOS);
+      Fator();
+      break;
+      }
+    case NEGACAO:{
+      jj_consume_token(NEGACAO);
+      Fator();
+      break;
+      }
+    case TRUE:
+    case FALSE:
+    case INTEGER_LITERAL:
+    case FLOAT_LITERAL:
+    case STRING_LITERAL:{
+      Literal();
+      break;
+      }
+    case STRING_TYPE:
+    case IDENTIFICADOR:{
+      VariavelOuChamada();
+      break;
+      }
+    default:
+      jj_la1[38] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+}
+
+/***********************************************************************************************
+ * Reconhece uma variável ou uma chamada de função.                                            *
+ * Primeiro, lê um identificador (que pode ser simples ou com caminho tipo módulo::submódulo). *
+ * Em seguida, opcionalmente, lê os parênteses com argumentos.                                 *
+ * Se existirem parênteses, trata como chamada de função; caso contrário, como variável.       *
+ ***********************************************************************************************/
+  static final public void VariavelOuChamada() throws ParseException {
+    IdentComCaminho();
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case ABRE_PARENTESES:{
+      jj_consume_token(ABRE_PARENTESES);
+      ListaArgumentos();
+      jj_consume_token(FECHA_PARENTESES);
+      break;
+      }
+    default:
+      jj_la1[39] = jj_gen;
+      ;
+    }
+}
+
+// Para indentificar o Input de Rust → String::new;
+  static final public void IdentComCaminho() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case IDENTIFICADOR:{
+      jj_consume_token(IDENTIFICADOR);
+      break;
+      }
+    case STRING_TYPE:{
+      jj_consume_token(STRING_TYPE);
+      break;
+      }
+    default:
+      jj_la1[40] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    label_14:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case DUPLO_DOIS_PONTOS:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[41] = jj_gen;
+        break label_14;
+      }
+      jj_consume_token(DUPLO_DOIS_PONTOS);
+      jj_consume_token(IDENTIFICADOR);
+    }
+}
+
+// Valores literais suportados → Exp.: 123, 3.14, "texto", true
+  static final public void Literal() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case INTEGER_LITERAL:{
+      jj_consume_token(INTEGER_LITERAL);
+      break;
+      }
+    case FLOAT_LITERAL:{
+      jj_consume_token(FLOAT_LITERAL);
+      break;
+      }
+    case STRING_LITERAL:{
+      jj_consume_token(STRING_LITERAL);
+      break;
+      }
+    case TRUE:{
+      jj_consume_token(TRUE);
+      break;
+      }
+    case FALSE:{
+      jj_consume_token(FALSE);
+      break;
+      }
+    default:
+      jj_la1[42] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+}
+
+// Instrução de retorno de função.
+  static final public void Return() throws ParseException {
+    jj_consume_token(RETURN);
+    Expressao();
+    jj_consume_token(PONTO_VIRGULA);
+}
+
+  static private boolean jj_2_1(int xla)
+ {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return (!jj_3_1()); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(0, xla); }
+  }
+
+  static private boolean jj_2_2(int xla)
+ {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return (!jj_3_2()); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(1, xla); }
+  }
+
+  static private boolean jj_3R_DeclaracaoMain_214_5_15()
+ {
+    if (jj_scan_token(FN)) return true;
+    if (jj_scan_token(MAIN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_Input_323_5_16()
+ {
+    if (jj_scan_token(IDENTIFICADOR)) return true;
+    if (jj_scan_token(DUPLO_DOIS_PONTOS)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_2()
+ {
+    if (jj_3R_Input_323_5_16()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_1()
+ {
+    if (jj_3R_DeclaracaoMain_214_5_15()) return true;
+    return false;
+  }
 
   static private boolean jj_initialized_once = false;
   /** Generated Token Manager. */
@@ -427,30 +1037,30 @@ public class RustGrammar implements RustGrammarConstants {
   /** Next token. */
   static public Token jj_nt;
   static private int jj_ntk;
+  static private Token jj_scanpos, jj_lastpos;
+  static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[19];
+  static final private int[] jj_la1 = new int[43];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static private int[] jj_la1_2;
-  static private int[] jj_la1_3;
   static {
 	   jj_la1_init_0();
 	   jj_la1_init_1();
 	   jj_la1_init_2();
-	   jj_la1_init_3();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x0,0x10000,0x0,0x0,0x0,0x0,0x0,0x200000,0x20000000,0x200000,0x0,0x0,0x0,0x0,0x4000000,0x0,0x0,0x0,0x20000000,};
+	   jj_la1_0 = new int[] {0x230500,0x200000,0x30500,0x0,0x0,0x0,0x0,0xff800000,0x800,0x0,0x0,0x1f9400,0x1c9400,0x30000,0x0,0x0,0x0,0x0,0x2000,0x0,0x0,0x4000,0xc0000,0x0,0x30000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x30000,0x0,0x0,0x0,0x30000,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x80,0x0,0x0,0x18000000,0x0,0x0,0x0,0x400,0x0,0x400,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6fff800,0x0,};
+	   jj_la1_1 = new int[] {0x208048,0x0,0x208048,0x0,0x200,0x0,0x800,0xf,0x0,0x400,0x2000,0x208048,0x0,0x208048,0x40,0x80,0x40,0x80,0x0,0x40,0x80,0x0,0x0,0x200,0x208048,0x1000,0xf0002000,0xf0002000,0x100000,0x80000,0xc00000,0xc00000,0xf000000,0xf000000,0xc000,0xc000,0x70000,0x70000,0x208048,0x40,0x8,0x0,0x0,};
 	}
 	private static void jj_la1_init_2() {
-	   jj_la1_2 = new int[] {0x0,0x0,0x20,0x0,0x40000000,0x4,0x0,0x0,0x0,0x0,0x0,0x4,0x0,0x0,0x0,0x10,0x0,0x0,0x0,};
+	   jj_la1_2 = new int[] {0x1c8,0x0,0x1c8,0x2,0x0,0x8,0x0,0x0,0x0,0x0,0x0,0x1c8,0x0,0x1c8,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1c8,0x0,0x1,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1c8,0x0,0x8,0x2,0x1c0,};
 	}
-	private static void jj_la1_init_3() {
-	   jj_la1_3 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x8000,0x0,0x1d8000,0x0,0x1d8000,0x0,0x80000,0x1d8000,0x0,0x0,0x1,0x0,0x1d8000,};
-	}
+  static final private JJCalls[] jj_2_rtns = new JJCalls[2];
+  static private boolean jj_rescan = false;
+  static private int jj_gc = 0;
 
   /** Constructor with InputStream. */
   public RustGrammar(java.io.InputStream stream) {
@@ -470,7 +1080,8 @@ public class RustGrammar implements RustGrammarConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Reinitialise. */
@@ -484,7 +1095,8 @@ public class RustGrammar implements RustGrammarConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Constructor. */
@@ -501,7 +1113,8 @@ public class RustGrammar implements RustGrammarConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Reinitialise. */
@@ -519,7 +1132,8 @@ public class RustGrammar implements RustGrammarConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Constructor with generated Token Manager. */
@@ -535,7 +1149,8 @@ public class RustGrammar implements RustGrammarConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Reinitialise. */
@@ -544,7 +1159,8 @@ public class RustGrammar implements RustGrammarConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -554,11 +1170,50 @@ public class RustGrammar implements RustGrammarConstants {
 	 jj_ntk = -1;
 	 if (token.kind == kind) {
 	   jj_gen++;
+	   if (++jj_gc > 100) {
+		 jj_gc = 0;
+		 for (int i = 0; i < jj_2_rtns.length; i++) {
+		   JJCalls c = jj_2_rtns[i];
+		   while (c != null) {
+			 if (c.gen < jj_gen) c.first = null;
+			 c = c.next;
+		   }
+		 }
+	   }
 	   return token;
 	 }
 	 token = oldToken;
 	 jj_kind = kind;
 	 throw generateParseException();
+  }
+
+  @SuppressWarnings("serial")
+  static private final class LookaheadSuccess extends java.lang.Error {
+    @Override
+    public Throwable fillInStackTrace() {
+      return this;
+    }
+  }
+  static private final LookaheadSuccess jj_ls = new LookaheadSuccess();
+  static private boolean jj_scan_token(int kind) {
+	 if (jj_scanpos == jj_lastpos) {
+	   jj_la--;
+	   if (jj_scanpos.next == null) {
+		 jj_lastpos = jj_scanpos = jj_scanpos.next = token_source.getNextToken();
+	   } else {
+		 jj_lastpos = jj_scanpos = jj_scanpos.next;
+	   }
+	 } else {
+	   jj_scanpos = jj_scanpos.next;
+	 }
+	 if (jj_rescan) {
+	   int i = 0; Token tok = token;
+	   while (tok != null && tok != jj_scanpos) { i++; tok = tok.next; }
+	   if (tok != null) jj_add_error_token(kind, i);
+	 }
+	 if (jj_scanpos.kind != kind) return true;
+	 if (jj_la == 0 && jj_scanpos == jj_lastpos) throw jj_ls;
+	 return false;
   }
 
 
@@ -591,16 +1246,56 @@ public class RustGrammar implements RustGrammarConstants {
   static private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
   static private int[] jj_expentry;
   static private int jj_kind = -1;
+  static private int[] jj_lasttokens = new int[100];
+  static private int jj_endpos;
+
+  static private void jj_add_error_token(int kind, int pos) {
+	 if (pos >= 100) {
+		return;
+	 }
+
+	 if (pos == jj_endpos + 1) {
+	   jj_lasttokens[jj_endpos++] = kind;
+	 } else if (jj_endpos != 0) {
+	   jj_expentry = new int[jj_endpos];
+
+	   for (int i = 0; i < jj_endpos; i++) {
+		 jj_expentry[i] = jj_lasttokens[i];
+	   }
+
+	   for (int[] oldentry : jj_expentries) {
+		 if (oldentry.length == jj_expentry.length) {
+		   boolean isMatched = true;
+
+		   for (int i = 0; i < jj_expentry.length; i++) {
+			 if (oldentry[i] != jj_expentry[i]) {
+			   isMatched = false;
+			   break;
+			 }
+
+		   }
+		   if (isMatched) {
+			 jj_expentries.add(jj_expentry);
+			 break;
+		   }
+		 }
+	   }
+
+	   if (pos != 0) {
+		 jj_lasttokens[(jj_endpos = pos) - 1] = kind;
+	   }
+	 }
+  }
 
   /** Generate ParseException. */
   static public ParseException generateParseException() {
 	 jj_expentries.clear();
-	 boolean[] la1tokens = new boolean[117];
+	 boolean[] la1tokens = new boolean[74];
 	 if (jj_kind >= 0) {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 19; i++) {
+	 for (int i = 0; i < 43; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -612,19 +1307,19 @@ public class RustGrammar implements RustGrammarConstants {
 		   if ((jj_la1_2[i] & (1<<j)) != 0) {
 			 la1tokens[64+j] = true;
 		   }
-		   if ((jj_la1_3[i] & (1<<j)) != 0) {
-			 la1tokens[96+j] = true;
-		   }
 		 }
 	   }
 	 }
-	 for (int i = 0; i < 117; i++) {
+	 for (int i = 0; i < 74; i++) {
 	   if (la1tokens[i]) {
 		 jj_expentry = new int[1];
 		 jj_expentry[0] = i;
 		 jj_expentries.add(jj_expentry);
 	   }
 	 }
+	 jj_endpos = 0;
+	 jj_rescan_token();
+	 jj_add_error_token(0, 0);
 	 int[][] exptokseq = new int[jj_expentries.size()][];
 	 for (int i = 0; i < jj_expentries.size(); i++) {
 	   exptokseq[i] = jj_expentries.get(i);
@@ -645,6 +1340,47 @@ public class RustGrammar implements RustGrammarConstants {
 
   /** Disable tracing. */
   static final public void disable_tracing() {
+  }
+
+  static private void jj_rescan_token() {
+	 jj_rescan = true;
+	 for (int i = 0; i < 2; i++) {
+	   try {
+		 JJCalls p = jj_2_rtns[i];
+
+		 do {
+		   if (p.gen > jj_gen) {
+			 jj_la = p.arg; jj_lastpos = jj_scanpos = p.first;
+			 switch (i) {
+			   case 0: jj_3_1(); break;
+			   case 1: jj_3_2(); break;
+			 }
+		   }
+		   p = p.next;
+		 } while (p != null);
+
+		 } catch(LookaheadSuccess ls) { }
+	 }
+	 jj_rescan = false;
+  }
+
+  static private void jj_save(int index, int xla) {
+	 JJCalls p = jj_2_rtns[index];
+	 while (p.gen > jj_gen) {
+	   if (p.next == null) { p = p.next = new JJCalls(); break; }
+	   p = p.next;
+	 }
+
+	 p.gen = jj_gen + xla - jj_la; 
+	 p.first = token;
+	 p.arg = xla;
+  }
+
+  static final class JJCalls {
+	 int gen;
+	 Token first;
+	 int arg;
+	 JJCalls next;
   }
 
 }
