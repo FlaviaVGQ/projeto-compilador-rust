@@ -23,3 +23,46 @@ Este é um controle de progresso para a implementação de funcionalidades no co
 - [x] Estrutura condicional simples e composta
 - [x] Comando de entrada e saída
 - [ ] Expressões
+
+---
+
+## 🔧 1. Instalando o Java (JDK)
+
+### 🔗 Baixe o JDK:
+
+- [Oracle JDK](https://www.oracle.com/java/technologies/javase-downloads.html)
+- [OpenJDK - Adoptium](https://adoptium.net/)
+
+> Recomendado: JDK 17 ou superior.
+
+### 🛠 Instalação no Windows:
+
+1. Baixe e instale.
+2. Configure as variáveis de ambiente:
+
+**Variáveis de ambiente:**
+
+| Variável      | Valor                                           |
+|---------------|-------------------------------------------------|
+| `JAVA_HOME`   | `C:\Program Files\Java\jdk-17` (por exemplo)    |
+| `Path`        | Adicione: `;%JAVA_HOME%\bin`                    |
+
+## 🧰 2. Instalando o Eclipse
+
+### 🔗 Baixe Eclipse IDE for Java Developers
+- [Eclipse IDE for Java Developers](https://www.eclipse.org/downloads/)
+
+
+### ⚙️ Instalação:
+1. Execute o instalador.
+2. Escolha "Eclipse IDE for Java Developers".
+3. Escolha um diretório para o workspace ao abrir.
+
+## 📦 3. Instalando e Configurando o JavaCC
+
+1. No "Eclipse IDE for Java Developers".
+2. "Help" > "Eclipse Marketplace" > "Find: 'JavaCC'"
+3. Instalar e reniciar a IDE
+
+---
+
