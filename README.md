@@ -62,7 +62,7 @@ Este é um controle de progresso para a implementação de funcionalidades no co
 
 1. No "Eclipse IDE for Java Developers".
 2. "Help" > "Eclipse Marketplace" > "Find: 'JavaCC'"
-3. Instalar e reniciar a IDE
+3. Instalar o JavaCC e reniciar a IDE.
 
 ---
 
