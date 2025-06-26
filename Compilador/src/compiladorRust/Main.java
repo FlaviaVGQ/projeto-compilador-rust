@@ -8,12 +8,10 @@ public class Main {
         try {
             FileReader reader = new FileReader("Teste.txt");
 
-            // Cria o parser com base na entrada do arquivo
             RustGrammar parser = new RustGrammar(reader);
 
             try {
-                // Inicia a análise sintática
-                parser.RUN();  // RUN -> Program -> valida toda a gramática
+                parser.RUN();
                 System.out.println("\n✅ Código pode ser compilado (nenhum erro sintático encontrado).");
 
             } catch (ParseException e) {
