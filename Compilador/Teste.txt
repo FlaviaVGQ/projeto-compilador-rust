@@ -1,22 +1,6 @@
+/*TESTE BASICO
+HELLO WORLD*/
 fn main() {
-    let mut numero = 5;
-
-    println!("--- Contagem Regressiva Otimizada ---");
-    while numero > 0 { // O loop continua enquanto 'numero' for maior que 0
-        numero -= 1; // Decrementa o número em cada iteração
-
-        // Situação para 'continue': Pular a exibição de um número específico (por exemplo, o 3)
-        if numero == 3 {
-            println!("(Pulando o número 3 com 'continue')");
-            continue; // Pula o resto desta iteração e vai para a próxima
-        }
-
-        println!("Contando: {}!", numero);
-
-        if numero == 1 {
-            println!("(Número 1 atingido! Saindo do loop com 'break')");
-            break; 
-        }
-    }
-    println!("Contagem finalizada!");
+	let a1_ = 1;
+    println!("Hello, world!");
 }

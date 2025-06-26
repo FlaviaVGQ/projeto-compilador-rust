@@ -138,7 +138,7 @@ TOKEN :
 // Identificador ------------------------------------------
 TOKEN :
 {
-    <IDENTIFICADOR : <LETRA> (<LETRA> | <LETRA> | "_")* > { System.out.println("Identificador: " + image); }
+    <IDENTIFICADOR : <LETRA> (<LETRA> | <DIGITO> | "_")* > { System.out.println("Identificador: " + image); }
   | < #LETRA       : ["a"-"z", "A"-"Z"] >
   | < #DIGITO      : ["0"-"9"] >
 }
