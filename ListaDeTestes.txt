@@ -1,0 +1,183 @@
+*LISTA DE TESTES APRESENTAÇÃO COMPILADORES*
+
+/*TESTE BASICO
+HELLO WORLD*/
+fn main() {
+    println!("Hello, world!");
+}
+
+=*=
+
+/*TIPO BASICO*/
+fn main() {
+    // Inteiro
+    let a = 90; 
+    let x: i32 = -250;
+
+    // Tipo Ponto-Flutuante 
+    let d: f64 = 8.0000000001;
+
+    // Tipo Booleano (bool)
+    let v: bool = true;
+    let f: bool = false;
+
+    // Tipo Caractere (char)
+    let c = "nome";
+
+    // Atribuição dupla
+    let (x, y) = (1, 2);
+
+    println!("Tipo Inteiro com sinal (inferido): {}", a);
+    println!("Mais um inteiro com sinal (explícito): {}", x);
+    println!("Float 64-bit: {}", d);
+    println!("Booleano Verdadeiro: {}", v);
+    println!("Booleano Falso: {}", f);
+    println!("Caractere: {}", c);
+    println!("{} e {}", x, y);
+}
+
+=*=
+
+/*ATRIBUIÇÃO DE VARIAVEL E MUDANÇA DE VALOR*/
+fn main() {
+    // Variável mutável
+    let mut y = 10; // y é mutável
+    println!("O valor inicial de y é: {}", y);
+    y = 15; // Isso é válido
+    println!("O novo valor de y é: {}", y);
+}
+
+=*=
+
+/*FUNÇÕES E CHAMADA DE FUNÇÕES*/
+// Função sem parâmetros e sem retorno (retorno implícito de `()`, a tupla vazia)
+fn outra_funcao() {
+    println!("Olá da outra função!");
+}
+
+// Função com um parâmetro
+fn imprimir_valor(x: i32) {
+    println!("O valor passado é: {}", x);
+}
+
+// Função que retorna um valor explícito
+fn somar(a: i32, b: i32) -> i32 {
+    return a + b; 
+}
+
+// Função que retorna um valor implicitamente (última expressão)
+fn cinco() -> i32 {
+    5 
+}
+
+fn main() {
+    // Chamada de função sem retorno e sem parâmetros
+    outra_funcao();
+
+    // Chamada de função com parâmetros
+    imprimir_valor(5);
+
+    // Chamada de função que retorna um valor
+    let resultado_soma = somar(30, 40);
+    println!("O resultado da soma é: {}", resultado_soma);
+
+    // Chamada de função com retorno implícito
+    println!("A função `cinco` retornou: {}", cinco());
+}
+
+=*=
+
+/* OPERADORES RELACIONAIS, ARITMETICOS E BOOLEANOS */
+fn main() {
+    let a = 10;
+    let b = 20;
+    let c = 5;
+    let d = 2;
+
+    println!("Valores: a = {}, b = {}, c = {}, d = {}", a, b, c, d);
+
+    // Operadores Aritméticos
+    println!("\n--- Operadores Aritméticos ---");
+    println!("{} + {} = {}", a, b, a + b); 
+    println!("{} - {} = {}", b, a, b - a); 
+    println!("{} * {} = {}", a, c, a * c); 
+    println!("{} / {} = {}", a, d, a / d); 
+    println!("{} % {} = {}", a, c, a % c); 
+
+    // Operadores Relacionais
+    println!("\n--- Operadores Relacionais ---");
+    println!("{} é maior que {}? {}", a, b, a > b); 
+    println!("{} é menor que {}? {}", a, b, a < b); 
+    println!("{} é maior ou igual a {}? {}", a, b, a >= b); 
+    println!("{} é menor ou igual a {}? {}", a, b, a <= b); 
+    println!("{} é igual a {}? {}", a, b, a == b); 
+    println!("{} é diferente de {}? {}", a, b, a != b); 
+
+    // Operadores Booleanos
+    println!("\n--- Operadores Booleanos ---");
+    let condA = a > c; // true
+    let condB = b < d; // false
+    let condC = a == 10; // true
+
+    println!("Condições: condA = {}, condB = {}, condC = {}", condA, condB, condC);
+    println!("condA && condB: {}", condA && condB); // AND lógico (curto-circuito)
+    println!("condA || condB: {}", condA || condB); // OR lógico (curto-circuito)
+    println!("!condA: {}", !condA); // NOT lógico
+    println!("condA && cond3: {}", condA && condC);
+}
+
+=*=
+
+/* TESTE DE WHILE */
+fn main() {
+    let mut numero = 5;
+
+    println!("Contagem regressiva com while:");
+    while numero != 0 {
+        println!("{}!", numero);
+        numero -= 1;
+   }
+   println!("Contagem regressiva com while:");
+   while numero > 0 && numero !=10 {
+        println!("{}!", numero);
+        numero = numero + 1;
+   }
+}
+
+=*=
+
+/* TESTE DE CONDICIONAL */
+fn main() {
+    let numero = 7;
+
+    // Estrutura condicional simples
+    if (numero > 5) {
+        println!("O número {} é maior que 5.", numero);
+    }
+
+    let x = 5;
+
+    // Estrutura condicional composta (if-else if-else)
+    if x > 5 {
+        println!("{} é maior que 5", x);
+    } else if x < 5 {
+        println!("{} é menor que 5", x);
+    } else {
+        println!("{} é igual a 5", x);
+    }
+}
+
+=*=
+
+/*TESTE DE ENTRADA E SAIDA*/
+use std::io;
+
+fn main() {
+    println!("Por favor, digite algo:"); 
+
+    let mut input = String::new(); 
+
+    io::stdin().read_line(&mut input).expect("Falha ao ler a linha");
+
+    println!("Você digitou: {}", input);
+}
