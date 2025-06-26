@@ -45,107 +45,111 @@ public interface RustGrammarConstants {
   /** RegularExpression Id. */
   int READLINE = 22;
   /** RegularExpression Id. */
-  int I8 = 23;
+  int BREAK = 23;
   /** RegularExpression Id. */
-  int I16 = 24;
+  int CONTINUE = 24;
   /** RegularExpression Id. */
-  int I32 = 25;
+  int I8 = 25;
   /** RegularExpression Id. */
-  int I64 = 26;
+  int I16 = 26;
   /** RegularExpression Id. */
-  int U8 = 27;
+  int I32 = 27;
   /** RegularExpression Id. */
-  int U16 = 28;
+  int I64 = 28;
   /** RegularExpression Id. */
-  int U32 = 29;
+  int U8 = 29;
   /** RegularExpression Id. */
-  int U64 = 30;
+  int U16 = 30;
   /** RegularExpression Id. */
-  int F32 = 31;
+  int U32 = 31;
   /** RegularExpression Id. */
-  int F64 = 32;
+  int U64 = 32;
   /** RegularExpression Id. */
-  int BOOL_TYPE = 33;
+  int F32 = 33;
   /** RegularExpression Id. */
-  int CHAR_TYPE = 34;
+  int F64 = 34;
   /** RegularExpression Id. */
-  int STRING_TYPE = 35;
+  int BOOL_TYPE = 35;
   /** RegularExpression Id. */
-  int ABRE_CHAVES = 36;
+  int CHAR_TYPE = 36;
   /** RegularExpression Id. */
-  int FECHA_CHAVES = 37;
+  int STRING_TYPE = 37;
   /** RegularExpression Id. */
-  int ABRE_PARENTESES = 38;
+  int ABRE_CHAVES = 38;
   /** RegularExpression Id. */
-  int FECHA_PARENTESES = 39;
+  int FECHA_CHAVES = 39;
   /** RegularExpression Id. */
-  int PONTO_VIRGULA = 40;
+  int ABRE_PARENTESES = 40;
   /** RegularExpression Id. */
-  int VIRGULA = 41;
+  int FECHA_PARENTESES = 41;
   /** RegularExpression Id. */
-  int DOIS_PONTOS = 42;
+  int PONTO_VIRGULA = 42;
   /** RegularExpression Id. */
-  int SETA = 43;
+  int VIRGULA = 43;
   /** RegularExpression Id. */
-  int PONTO = 44;
+  int DOIS_PONTOS = 44;
   /** RegularExpression Id. */
-  int IGUAL = 45;
+  int SETA = 45;
   /** RegularExpression Id. */
-  int MAIS = 46;
+  int PONTO = 46;
   /** RegularExpression Id. */
-  int MENOS = 47;
+  int IGUAL = 47;
   /** RegularExpression Id. */
-  int ASTERISCO = 48;
+  int MAIS = 48;
   /** RegularExpression Id. */
-  int BARRA = 49;
+  int MENOS = 49;
   /** RegularExpression Id. */
-  int PORCENTAGEM = 50;
+  int ASTERISCO = 50;
   /** RegularExpression Id. */
-  int E_LOGICO = 51;
+  int BARRA = 51;
   /** RegularExpression Id. */
-  int OU_LOGICO = 52;
+  int PORCENTAGEM = 52;
   /** RegularExpression Id. */
-  int NEGACAO = 53;
+  int E_LOGICO = 53;
   /** RegularExpression Id. */
-  int DUPLO_IGUAL = 54;
+  int OU_LOGICO = 54;
   /** RegularExpression Id. */
-  int DIFERENTE = 55;
+  int NEGACAO = 55;
   /** RegularExpression Id. */
-  int MAIOR = 56;
+  int DUPLO_IGUAL = 56;
   /** RegularExpression Id. */
-  int MENOR = 57;
+  int DIFERENTE = 57;
   /** RegularExpression Id. */
-  int MENOR_IGUAL = 58;
+  int MAIOR = 58;
   /** RegularExpression Id. */
-  int MAIOR_IGUAL = 59;
+  int MENOR = 59;
   /** RegularExpression Id. */
-  int MAIS_IGUAL = 60;
+  int MENOR_IGUAL = 60;
   /** RegularExpression Id. */
-  int MENOS_IGUAL = 61;
+  int MAIOR_IGUAL = 61;
   /** RegularExpression Id. */
-  int ASTERISCO_IGUAL = 62;
+  int MAIS_IGUAL = 62;
   /** RegularExpression Id. */
-  int BARRA_IGUAL = 63;
+  int MENOS_IGUAL = 63;
   /** RegularExpression Id. */
-  int PORCENTAGEM_IGUAL = 64;
+  int ASTERISCO_IGUAL = 64;
   /** RegularExpression Id. */
-  int DUPLO_DOIS_PONTOS = 65;
+  int BARRA_IGUAL = 65;
   /** RegularExpression Id. */
-  int E_COMERCIAL = 66;
+  int PORCENTAGEM_IGUAL = 66;
   /** RegularExpression Id. */
-  int IDENTIFICADOR = 67;
+  int DUPLO_DOIS_PONTOS = 67;
   /** RegularExpression Id. */
-  int LETRA = 68;
+  int E_COMERCIAL = 68;
   /** RegularExpression Id. */
-  int DIGITO = 69;
+  int IDENTIFICADOR = 69;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 70;
+  int LETRA = 70;
   /** RegularExpression Id. */
-  int FLOAT_LITERAL = 71;
+  int DIGITO = 71;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 72;
+  int INTEGER_LITERAL = 72;
   /** RegularExpression Id. */
-  int BOOL_LITERAL = 73;
+  int FLOAT_LITERAL = 73;
+  /** RegularExpression Id. */
+  int STRING_LITERAL = 74;
+  /** RegularExpression Id. */
+  int BOOL_LITERAL = 75;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -175,6 +179,8 @@ public interface RustGrammarConstants {
     "\"return\"",
     "\"use\"",
     "\"read_line\"",
+    "\"break\"",
+    "\"continue\"",
     "\"i8\"",
     "\"i16\"",
     "\"i32\"",

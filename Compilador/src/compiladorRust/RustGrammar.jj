@@ -18,13 +18,13 @@ import java.io.Reader;
 public class RustGrammar {
 
     public static void main(String[] args) {
-        String arquivo = args.length > 0 ? args[0] : "TesteLexico.txt";
+        String arquivo = args.length > 0 ? args[0] : "Teste.txt";
 
         try (Reader r = new FileReader(arquivo)) {
 
             RustGrammar parser = new RustGrammar(r);
 
-            parser.RUN(); // Ou parser.Programa();
+            parser.RUN(); 
 
             System.out.println("✓ Arquivo analisado sem erros.");
 
@@ -66,11 +66,13 @@ TOKEN :
     | <WHILE   : "while">      { System.out.println("Palavra Reservada: " + image); }
     | <TRUE    : "true">       { System.out.println("Literal Bool: " + image); }
     | <FALSE   : "false">      { System.out.println("Literal Bool: " + image); }
-    | <PRINT   : "print!">     { System.out.println("Macro: " + image); }
-    | <PRINTLN : "println!">   { System.out.println("Macro: " + image); }
+    | <PRINT   : "print!">     { System.out.println("Palavra Reservada: " + image); }
+    | <PRINTLN : "println!">   { System.out.println("Palavra Reservada: " + image); }
     | <RETURN  : "return">     { System.out.println("Palavra Reservada: " + image); }
     | <USE     : "use">        { System.out.println("Palavra Reservada: " + image); }
     | <READLINE: "read_line">  { System.out.println("Palavra Reservada: " + image); }
+	| <BREAK   : "break">      { System.out.println("Palavra Reservada: " + image); }
+	| <CONTINUE: "continue">   { System.out.println("Palavra Reservada: " + image); } 
 }
 
 // Tipos básicos ------------------------------------------
@@ -153,8 +155,9 @@ TOKEN :
   	  | < BOOL_LITERAL  : ("!")? (<TRUE> | <FALSE>) > { System.out.println("Literal Bool: " + image); }
 }
 
+
 /**********************************
- * REGFRAS GRAMATICAIS SINTATICAS *
+ * REGRAS GRAMATICAIS SINTATICAS *
  **********************************/
 
 // RUN: ponto de entrada geral do parser. Analisa um programa inteiro até o EOF.
@@ -170,6 +173,7 @@ void RUN() : {}
  * use std::io;                                                    *
  * fn main() {}                                                    *
  *******************************************************************/
+
 void Programa() : {}
 {
     ( Item() )*
@@ -180,19 +184,20 @@ void Programa() : {}
  * Item: representa cada construção de topo do arquivo.                     *
  * Pode ser um import, função, declaração de variável ou expressão isolada. *
  ****************************************************************************/
+
 void Item() : {}
 {
       ImportBiblioteca()
     | LOOKAHEAD(2) DeclaracaoMain()
     | DeclaracaoFuncao()
     | DeclaracaoVariavel()
-    | Sentenca()
 }
 
-/****************************************************************
+/**********************************************************************
  * ImportBiblioteca: declaração "use" para importar nomes ou módulos. *
- * Exemplo: use std::io;                                        *
- ****************************************************************/
+ * Exemplo: use std::io;                                              *
+ **********************************************************************/
+
 void ImportBiblioteca() : {}
 {
     <USE> CaminhoImportacao() <PONTO_VIRGULA>
@@ -208,11 +213,12 @@ void CaminhoImportacao() : {}
  * Declaração de Função *                                   
  ************************/
 
-
+//Declaração do Main
 void DeclaracaoMain() : {}
 {
     <FN> <MAIN> <ABRE_PARENTESES> <FECHA_PARENTESES> Bloco()
 }
+
 // Define uma função com parâmetros, tipo de retorno e corpo → Exp.: fn soma(a: i32, b: i32) -> i32 { a + b }
 void DeclaracaoFuncao() : {}
 {
@@ -230,12 +236,12 @@ void Parametro() : {}
 {
     <IDENTIFICADOR> <DOIS_PONTOS> Tipo()
 }
+
 // Seta "->" seguida de tipo → Exp.: (a: i32, b: i32) -> i32 { < code > }
 void TipoRetorno() : {}
 {
     ( <SETA> Tipo() )?
 }
-
 
 // tipos primitivos da linguagem Rust
 void Tipo() : {} {
@@ -253,8 +259,25 @@ void Tipo() : {} {
 // Declara variável → Exp.: let mut nome_var: i32 = 10;
 void DeclaracaoVariavel() : {}
 {
-    <LET> ( <MUT> )? <IDENTIFICADOR> ( <DOIS_PONTOS> Tipo() )? ( <IGUAL> Expressao() )? <PONTO_VIRGULA>
+    <LET> ( <MUT> )? Padrao() ( <DOIS_PONTOS> Tipo() )? ( <IGUAL> Expressao() )? <PONTO_VIRGULA>
 }
+
+
+// Declara uma estrutura padrão de variável (possivelmente composta). 
+// Pode ser um identificador simples ou uma tupla com múltiplos padrões.
+// Exemplos: let x; let (a, b);
+void Padrao() : {}
+{
+      <IDENTIFICADOR>
+    | <ABRE_PARENTESES> Padrao() (<VIRGULA> Padrao())* <FECHA_PARENTESES>
+}
+
+// Lista de expressões separadas por vírgula. Exemplo: println!("{} {}", a, b);
+void ListaExpressoes() : {}
+{
+    Expressao() (<VIRGULA> Expressao())*
+}
+
 
 /********************************
  * Bloco e Declarações internas *
@@ -272,18 +295,13 @@ void CorpoDeDeclaracao() : {}
       While()
     | Condicional()
     | Return()
+    | Break()
+    | Continue()
     | Print()
     | DeclaracaoVariavel()
     | LOOKAHEAD(2) Input()
-    | Sentenca()
-    
 }
 
-// A expressão seguida de ponto e vírgula → Exp.: x + 1;
-void Sentenca() : {}
-{
-    Expressao() <PONTO_VIRGULA>
-}
 
 /*************************
  * Estrutura de Controle *                                
@@ -295,6 +313,19 @@ void While() : {}
     <WHILE> (<ABRE_PARENTESES>)? Expressao() (<FECHA_PARENTESES>)? Bloco()
 }
 
+// break;
+void Break() : {}
+{
+    <BREAK> <PONTO_VIRGULA>
+}
+
+// continue;
+void Continue() : {}
+{
+    <CONTINUE> <PONTO_VIRGULA>
+}
+
+
 // Condicional if/else if/else → Exp.: if n == 0 { ... } else if { ... } else { ... }
 void Condicional() : {}
 {
@@ -305,7 +336,7 @@ void Condicional() : {}
  * ENTRADA E SAIDA *
  *******************/
 
-
+//Print
 void Print() : {}
 {
     (<PRINT> | <PRINTLN>) <ABRE_PARENTESES> (ListaArgumentos()) <FECHA_PARENTESES> <PONTO_VIRGULA>
@@ -320,9 +351,7 @@ void ListaArgumentos() : {}
 // Input em Rust → Exp:. io::stdin().read_line(&mut linha).unwrap();
 void Input() : {}
 {
-    <IDENTIFICADOR> <DUPLO_DOIS_PONTOS> <IDENTIFICADOR> <ABRE_PARENTESES> <FECHA_PARENTESES>
-    <PONTO> <READLINE> <ABRE_PARENTESES> <E_COMERCIAL> <MUT> <IDENTIFICADOR> <FECHA_PARENTESES>
-    (<PONTO> <IDENTIFICADOR> <ABRE_PARENTESES> <STRING_LITERAL> <FECHA_PARENTESES>)* <PONTO_VIRGULA>
+     VariavelOuChamada() <PONTO_VIRGULA>
 }
 
 /**************
@@ -392,11 +421,13 @@ void Termo() : {}
  * Respeitar a precedência: parênteses, unário, literais ou chamadas                *
  * → Exp: (x) > Simbolos: -! > *, /, %, ... > + ou - > Comparação; ==, !=, &&, ', = *
  ************************************************************************************/
+
 void Fator() : {}
 {
-      <ABRE_PARENTESES> Expressao() <FECHA_PARENTESES>
+     <ABRE_PARENTESES> (ListaExpressoes()) <FECHA_PARENTESES> 
     | <MENOS> Fator()
     | <NEGACAO> Fator()
+    | <E_COMERCIAL> ( <MUT> )? Fator()
     | Literal()
     | VariavelOuChamada()
 }
@@ -407,12 +438,20 @@ void Fator() : {}
  * Em seguida, opcionalmente, lê os parênteses com argumentos.                                 *
  * Se existirem parênteses, trata como chamada de função; caso contrário, como variável.       *
  ***********************************************************************************************/
+
 void VariavelOuChamada() : {}
 {
-    IdentComCaminho() ( <ABRE_PARENTESES> ListaArgumentos() <FECHA_PARENTESES> )? 
+    IdentComCaminho() 
+    (
+        ( <ABRE_PARENTESES> ListaArgumentos() <FECHA_PARENTESES> ) 
+        | (<PONTO> <READLINE> <ABRE_PARENTESES> <E_COMERCIAL> <MUT> <IDENTIFICADOR> <FECHA_PARENTESES>
+          (<PONTO> <IDENTIFICADOR> <ABRE_PARENTESES> <STRING_LITERAL> <FECHA_PARENTESES>)* <PONTO_VIRGULA>) 
+    )*
 }
 
+
 // Para indentificar o Input de Rust → String::new;
+// Começa com um identificador ou String::new
 void IdentComCaminho() : {}
 {
     ( <IDENTIFICADOR> | <STRING_TYPE> )
@@ -430,7 +469,8 @@ void Literal() : {}
 }
 
 // Instrução de retorno de função.
+// 'return;' ou 'return x;'
 void Return() : {}
 {
-    <RETURN> Expressao() <PONTO_VIRGULA>
+    (<RETURN>)? Expressao() (<PONTO_VIRGULA>)?  
 }

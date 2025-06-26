@@ -6,7 +6,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         try {
-            FileReader reader = new FileReader("TesteLexico.txt");
+            FileReader reader = new FileReader("Teste.txt");
 
             // Cria o parser com base na entrada do arquivo
             RustGrammar parser = new RustGrammar(reader);
