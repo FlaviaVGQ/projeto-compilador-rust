@@ -4,7 +4,7 @@
     <img src="https://rustacean.net/assets/rustacean-flat-happy.png">
   </p>
   <p align="center">
-    <img loading="lazy" src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
+    <img loading="lazy" src="http://img.shields.io/static/v1?label=STATUS&message=DESENVOLVIDO&color=GREEN&style=for-the-badge"/>
   </p>
 </div>
 
