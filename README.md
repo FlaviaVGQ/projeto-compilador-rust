@@ -22,7 +22,7 @@ Este é um controle de progresso para a implementação de funcionalidades no co
 - [x] Laços
 - [x] Estrutura condicional simples e composta
 - [x] Comando de entrada e saída
-- [ ] Expressões
+- [x] Expressões
 
 ---
 
